@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blockchain 3D</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0d1117; color: #e6edf3; font-family: system-ui, sans-serif; overflow: hidden; }
+    #info { position: absolute; top: 16px; left: 16px; max-width: 360px; background: rgba(22,27,34,.9); border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.5; }
+    #info h1 { font-size: 18px; margin: 0 0 6px; }
+    #info code { font-size: 12px; color: #7ee787; word-break: break-all; }
+    #fps { position: absolute; bottom: 12px; right: 12px; font-size: 12px; opacity: .6; }
+  </style>
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <div id="info">
+    <h1>Blockchain 3D</h1>
+    <p id="details">Clique sur un bloc pour voir ce qu'il contient.</p>
+  </div>
+  <div id="fps"></div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
