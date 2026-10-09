@@ -2,8 +2,9 @@
 
 **Période** : du 05/10/2026 au 09/10/2026
 **Membre** : Mouhamed Al Amine BAH (@alamine01)
+**Démo en ligne** : https://alamine01.github.io/blockchain-3d/
 **Dépôt** : https://github.com/alamine01/blockchain-3d
-**GitHub Project** : https://github.com/users/alamine01/projects/NUMERO
+**GitHub Project** : https://github.com/alamine01/blockchain-3d/projects
 
 ## 1. Ce qui a été fait cette semaine
 
@@ -18,14 +19,16 @@
 
 | Issue | Titre | Statut | Responsable |
 |---|---|---|---|
-| #1 | Créer le dépôt et le README | Terminé | Moi |
-| #2 | Configurer le GitHub Project et les milestones | Terminé | Moi |
-| #3 | Rédiger le document de cadrage | Terminé | Moi |
-| #4 | Scène Three.js minimale + GitHub Pages | En cours | Moi |
+| #1 | Créer le dépôt et le README | Terminé | Mouhamed Al Amine BAH |
+| #2 | Configurer le GitHub Project et les milestones | Terminé | Mouhamed Al Amine BAH |
+| #3 | Rédiger le document de cadrage | Terminé | Mouhamed Al Amine BAH |
+| #4 | Scène Three.js minimale + GitHub Pages | Terminé | Mouhamed Al Amine BAH |
+| #5 | Fiche de suivi semaine 01 | En cours | Mouhamed Al Amine BAH |
 
 ## 3. Difficultés rencontrées
 
 - Mise en place tardive (le jalon du 09/10 a été découvert le jour même) : rattrapé dans la soirée.
+- Prise en main de GitHub Pages et GitHub Projects (configuration de la source de déploiement, colonnes du tableau).
 
 ## 4. Décisions prises
 
@@ -50,4 +53,4 @@
 
 | Membre | Heures |
 |---|---|
-| Mouhamed Al Amine BAH | ... |
+| Mouhamed Al Amine BAH | 4 h |

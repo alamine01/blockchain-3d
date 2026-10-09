@@ -14,7 +14,7 @@ Expérience web interactive en 3D (Three.js) qui fait comprendre le fonctionneme
 ## Liens
 
 - **Démo en ligne** : https://alamine01.github.io/blockchain-3d/
-- **GitHub Project** : https://github.com/users/alamine01/projects/NUMERO
+- **GitHub Project** : https://github.com/alamine01/blockchain-3d/projects
 - **Choix de modélisation** : [`docs/MMI-R507-projet-blockchain-CHOIX-MODELISATION.md`](docs/MMI-R507-projet-blockchain-CHOIX-MODELISATION.md)
 - **Document de cadrage** : [`docs/CADRAGE.md`](docs/CADRAGE.md)
 - **Suivi hebdomadaire** : [`docs/suivi/`](docs/suivi/)
