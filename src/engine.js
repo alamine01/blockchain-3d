@@ -114,7 +114,7 @@ export function createEngine(container) {
     composer.setSize(w, h);
     camera.aspect = w / h;
     // Sur grand écran, le panneau couvre la droite : on décale le centre de l'image vers la gauche.
-    const off = w > 900 ? 228 : 0;
+    const off = w > 1100 ? 228 : w > 900 ? 203 : 0;
     if (off) camera.setViewOffset(w, h, off, 0, w, h); else camera.clearViewOffset();
     camera.updateProjectionMatrix();
   }

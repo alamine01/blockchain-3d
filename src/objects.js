@@ -1,7 +1,7 @@
 // Objets 3D réutilisables : bloc, chaîne de blocs, ordinateur (nœud) et paquet qui voyage.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js';
-import { chainStatus, describe } from './chain.js';
+import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js?v=20261104b';
+import { chainStatus, describe } from './chain.js?v=20261104b';
 
 // Couleurs par état : vert = valide, rouge = invalide, ambre = sélectionné / en cours.
 const STATES = {

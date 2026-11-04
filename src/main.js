@@ -1,10 +1,10 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js';
-import { Station } from './objects.js';
-import { EvidenceBoard } from './board.js';
-import { makeChain, clone, setData } from './chain.js';
-import { steps, CAMERAS } from './story.js';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261104b';
+import { Station } from './objects.js?v=20261104b';
+import { EvidenceBoard } from './board.js?v=20261104b';
+import { makeChain, clone, setData } from './chain.js?v=20261104b';
+import { steps, CAMERAS } from './story.js?v=20261104b';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -113,6 +113,7 @@ async function start() {
     const s = steps[i];
     $('tag').textContent = s.tag;
     $('count').textContent = `Étape ${i} / ${steps.length - 1}`;
+    document.querySelector('#progress span').style.width = `${(i / (steps.length - 1)) * 100}%`;
     $('title').textContent = s.title;
     $('story').innerHTML = s.story;
     $('retenir').innerHTML = s.retenir;
