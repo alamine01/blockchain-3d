@@ -1,7 +1,7 @@
 // Objets 3D réutilisables : bloc, chaîne de blocs, ordinateur (nœud) et paquet qui voyage.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js?v=20261104b';
-import { chainStatus, describe } from './chain.js?v=20261104b';
+import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js?v=20261104d';
+import { chainStatus, describe } from './chain.js?v=20261104d';
 
 // Couleurs par état : vert = valide, rouge = invalide, ambre = sélectionné / en cours.
 const STATES = {
@@ -16,7 +16,7 @@ export class BlockMesh extends THREE.Group {
     super();
     this.size = size;
     const geo = new THREE.BoxGeometry(size, size, size);
-    this.mat = new THREE.MeshPhysicalMaterial({ color: C.block, roughness: 0.12, metalness: 0.05, clearcoat: 1, clearcoatRoughness: 0.08, transparent: true, opacity: 0.82, envMapIntensity: 0.9 });
+    this.mat = new THREE.MeshPhysicalMaterial({ color: C.block, roughness: 0.35, metalness: 0.05, clearcoat: 0.6, clearcoatRoughness: 0.35, transparent: true, opacity: 0.82, envMapIntensity: 0.6 });
     this.box = new THREE.Mesh(geo, this.mat);
     this.add(this.box);
     this.edgeMat = new THREE.LineBasicMaterial({ color: C.ok });
@@ -168,7 +168,7 @@ export class Station extends THREE.Group {
     folder.position.set(-0.85, -0.37, 0.35);
     folder.rotation.y = 0.25;
     this.add(folder);
-    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0xe8e4da, roughness: 0.3 }));
+    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0x6d675e, roughness: 0.8 }));
     cup.position.set(0.95, -0.29, 0.4);
     this.add(cup);
     this.frameMat = new THREE.MeshStandardMaterial({ color: 0x0c0e12, emissive: 0x000000, metalness: 0.7, roughness: 0.25 });

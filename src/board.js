@@ -1,7 +1,7 @@
 // Mur de preuves : les 4 suspects en haut, les preuves en bas, reliées à Léa par des fils rouges.
 // Une preuve s'épingle chaque fois que l'utilisateur termine l'étape correspondante.
 import * as THREE from 'three';
-import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261104b';
+import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261104d';
 
 const SUSPECTS = [
   { name: 'Marc', role: 'petit-fils' },
@@ -59,19 +59,20 @@ function drawSuspect(g, w, h, s, guilty) {
 
 function drawProof(g, w, h, p) {
   roundRect(g, 8, 8, w - 16, h - 16, 22);
-  g.fillStyle = '#f2ede1'; g.fill();
-  g.fillStyle = CSS.bad; g.fillRect(8, 40, 14, h - 80);
+  g.fillStyle = '#141a24'; g.fill();
+  g.lineWidth = 3; g.strokeStyle = 'rgba(255,90,79,0.55)'; g.stroke();
+  g.fillStyle = CSS.bad; g.fillRect(8, 40, 10, h - 80);
   g.textAlign = 'left';
-  g.fillStyle = '#7a2a22'; g.font = `800 40px ${FONT_TITLE}`; g.fillText(`PREUVE · ${p.title}`, 46, 80);
-  g.fillStyle = '#14171c'; g.font = `700 52px ${FONT}`;
+  g.fillStyle = CSS.bad; g.font = `800 40px ${FONT_TITLE}`; g.fillText(`PREUVE · ${p.title}`, 42, 80);
+  g.fillStyle = '#d9d4c8'; g.font = `700 50px ${FONT}`;
   const words = p.text.split(' ');
-  let line = '', y = 170;
+  let line = '', y = 165;
   for (const word of words) {
     const test = line ? `${line} ${word}` : word;
-    if (g.measureText(test).width > w - 90) { g.fillText(line, 46, y); line = word; y += 62; } else line = test;
+    if (g.measureText(test).width > w - 80) { g.fillText(line, 42, y); line = word; y += 60; } else line = test;
   }
-  g.fillText(line, 46, y);
-  g.fillStyle = '#5b5e66'; g.font = `500 34px ${FONT}`; g.fillText(p.sub, 46, h - 50);
+  g.fillText(line, 42, y);
+  g.fillStyle = '#8a909b'; g.font = `500 32px ${FONT}`; g.fillText(p.sub, 42, h - 48);
 }
 
 export class EvidenceBoard extends THREE.Group {

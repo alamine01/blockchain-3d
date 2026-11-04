@@ -1,5 +1,5 @@
 // Modèle pédagogique d'une blockchain : des blocs, leur empreinte, le chaînage et le minage.
-import { sha256 } from './sha256.js?v=20261104b';
+import { sha256 } from './sha256.js?v=20261104d';
 
 // Difficulté : nombre de zéros exigés au début de l'empreinte d'un bloc valide.
 export const DIFFICULTY = 3;

@@ -77,7 +77,7 @@ export function createEngine(container) {
 
   // Lampe d'enquêteur : un cône de lumière chaude au-dessus de chaque zone.
   for (const z of [0, 18, -30, -60]) {
-    const lamp = new THREE.SpotLight(0xffc878, 140, 34, Math.PI / 4.5, 0.7, 1.5);
+    const lamp = new THREE.SpotLight(0xffc878, 55, 34, Math.PI / 4.5, 0.8, 1.5);
     lamp.position.set(0, 12, z + 2);
     lamp.target.position.set(0, -1.2, z);
     scene.add(lamp, lamp.target);
@@ -101,7 +101,8 @@ export function createEngine(container) {
   // Halo lumineux (bloom) sur les éléments brillants : liens, arêtes, paquets.
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.9, 0.6, 0.55);
+  // Seuil élevé : seuls les liens, arêtes et paquets très lumineux brillent, pas les textes.
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.7, 0.5, 0.78);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const forceHQ = new URLSearchParams(location.search).has('hq');

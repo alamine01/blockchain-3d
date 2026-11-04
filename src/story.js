@@ -1,8 +1,8 @@
 // Les 9 étapes de « L'Affaire Émile ». Chaque étape = une notion + une interaction.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261104b';
-import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261104b';
-import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261104b';
+import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261104d';
+import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261104d';
+import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261104d';
 
 export const AREAS = {
   nodes: new THREE.Vector3(0, 0, -30),
