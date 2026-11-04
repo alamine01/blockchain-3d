@@ -3,13 +3,16 @@
 Projet R507 — BUT MMI 3e année.
 Expérience web interactive en 3D (Three.js) qui fait comprendre le fonctionnement d'une blockchain à un public non initié.
 
+**L'Affaire Émile** : l'utilisateur est un enquêteur. Un grand-père a laissé un registre partagé (une blockchain) à ses 4 petits-enfants, et l'une d'eux prétend avoir reçu 50 000 jetons. En 9 étapes, chaque notion de la blockchain devient un indice pour trouver la vérité.
+
 > ⚠️ Ce projet est une **médiation scientifique** : il ne s'agit pas d'une vraie blockchain, mais d'une représentation pédagogique.
 
 ## Équipe
 
 | Membre | Rôle principal |
 |---|---|
-| Mouhamed Al Amine BAH ([@alamine01](https://github.com/alamine01)) | Gestion de projet, développement 3D, UX, documentation et tests |
+| Mouhamed Al Amine BAH ([@alamine01](https://github.com/alamine01)) | Gestion de projet, développement 3D, documentation |
+| *(nom à compléter)* ([@LeCapet](https://github.com/LeCapet)) | UX, storyboard, tests utilisateurs |
 
 ## Liens
 
@@ -46,7 +49,14 @@ Puis ouvrir http://localhost:8000.
 
 ```
 ├── index.html          # point d'entrée
-├── src/main.js         # scène Three.js
+├── style.css
+├── src/
+│   ├── main.js         # monde 3D et navigation entre les étapes
+│   ├── story.js        # les 9 étapes de l'enquête (une par notion)
+│   ├── objects.js      # bloc, chaîne, ordinateur (nœud), paquet, étincelles
+│   ├── engine.js       # rendu, caméra, halo, animations, clics
+│   ├── chain.js        # modèle : empreinte, chaînage, minage, validation
+│   └── sha256.js       # fonction de hachage SHA-256
 ├── docs/
 │   ├── CADRAGE.md
 │   ├── MMI-R507-projet-blockchain-CHOIX-MODELISATION.md
@@ -61,3 +71,4 @@ Déclaration transparente, conformément au sujet :
 | Date | Outil | Usage | Vérification |
 |---|---|---|---|
 | 09/10/2026 | Claude | Structure initiale du dépôt, liste d'issues, scène de départ | Relu et adapté |
+| 04/11/2026 | Claude | Développement de la scène 3D et de l'enquête, documentation | Code relu, testé et expliqué par l'équipe |

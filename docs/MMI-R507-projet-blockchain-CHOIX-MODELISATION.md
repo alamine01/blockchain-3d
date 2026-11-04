@@ -1,10 +1,10 @@
 # Choix de modélisation — Blockchain 3D
 
-> Version de travail (semaine 02). La structure sera alignée sur le modèle officiel fourni avec le sujet.
+> Version de travail (novembre). La structure sera alignée sur le modèle officiel fourni avec le sujet.
 
 **Projet** : Blockchain 3D — https://alamine01.github.io/blockchain-3d/
 **Public visé** : personne non initiée, sans explication orale.
-**Fil rouge** : le voyage d'un paiement — Alice envoie 5 jetons à Bob.
+**Fil rouge** : « L'Affaire Émile » — l'utilisateur est un enquêteur qui doit découvrir qui a falsifié le registre partagé d'un grand-père.
 
 ---
 
@@ -84,13 +84,69 @@
 
 ## 2. Storyboard
 
-*À compléter (issue #7) : une case par écran — croquis, ce qu'on voit, action de l'utilisateur, animation, texte affiché, notion couverte. Croquis dans `docs/storyboard/`.*
+Le parcours est linéaire (9 écrans) avec un retour possible à tout moment. Chaque écran suit la même structure : un récit (à droite), une action à faire, une scène 3D qui réagit, et un encadré « À retenir ».
+
+| # | Écran | Caméra / ce qu'on voit | Action de l'utilisateur | Réaction animée | Texte « À retenir » (résumé) |
+|---|---|---|---|---|---|
+| 0 | Le dossier | Vue plongeante sur 4 bureaux reliés par des câbles, l'ordinateur d'Émile au centre | Lit le litige, ouvre le dossier | Travelling d'ouverture du ciel vers le réseau | Un registre conservé par plusieurs personnes |
+| 1 | La pièce à conviction | Rangée de 9 cubes (copie de Marc) | Clique sur un cube | La caméra s'approche, le bloc s'illumine, ses 4 champs s'affichent | Données, empreinte, empreinte du précédent, nonce |
+| 2 | Le labo des empreintes | 3 gros cubes d'essai | Tape dans les données d'un bloc | L'empreinte change en direct, le cube et le lien suivant passent au rouge ; « Re-miner » rescelle le bloc mais pas le lien | Une lettre change, toute l'empreinte change |
+| 3 | La scène du crime | Copie de Léa, d'abord grise | Clique bloc par bloc, modifie, restaure | Les blocs 7, 8, 9 tombent au rouge un par un (domino), étincelles | Modifier un bloc invalide tous les suivants |
+| 4 | Les témoins | Les 4 bureaux avec leur mini-chaîne | Lit le bloc 7 chez chacun, compare, diffuse une opération | Écrans qui s'allument, paquets lumineux qui voyagent de voisin en voisin, copie de Léa marquée « rejetée » | Pas de centre, la copie différente est rejetée |
+| 5 | L'alibi de Léa | Un gros bloc 10 sous la lampe | Choisit la difficulté, mine, lance la course | Le nonce défile, le cube tourne puis passe au vert ; deux rangées « Léa » et « Réseau » grandissent | Long à trouver, instantané à vérifier |
+| 6 | Le procès | Les 4 bureaux + barres de calcul ou piles de pièces | Bascule PoW / PoS, lance des manches | Barres qui montent (course), compteur d'énergie ; piles de cautions, celle de Léa fond | Deux règles de consensus, avantages et limites |
+| 7 | La reconstitution | Les 4 bureaux + l'ordinateur d'Émile | Avance étape par étape, puis rejoue la double dépense | Paquet signé, propagation, validation, nouveaux blocs ; la 2e dépense devient rouge et éclate | Cycle de vie d'une transaction, double dépense refusée |
+| 8 | Le verdict | Les 4 bureaux | Désigne le coupable | Écran « COUPABLE », récapitulatif des preuves, ou retour vers l'indice manqué | On ne modifie pas une blockchain, on la complète |
 
 ---
 
 ## 3. Choix de représentation par notion
 
-*À compléter (issue #8) : pour chaque notion, la forme 3D retenue, la couleur, l'interaction, et la justification pédagogique, avec les alternatives écartées.*
+### Choix transversaux
+
+| Choix | Justification | Alternative écartée |
+|---|---|---|
+| **Vert = valide, rouge = invalide, ambre = sélectionné** | Code couleur universel, compris sans légende. Toujours doublé par un texte (« ✓ valide », « ✗ invalide ») pour les personnes daltoniennes. | Couleurs par personne : trop d'informations à décoder |
+| **Fil rouge « enquête »** | L'utilisateur a une raison de manipuler chaque notion (elle devient un indice). La méfiance entre héritiers illustre le problème de confiance que résout la blockchain. | « Alice paie Bob » : clair mais passif et vu partout |
+| **Vraie fonction SHA-256** | Les empreintes affichées sont de vraies empreintes (comme Bitcoin) : on peut les vérifier avec n'importe quel outil en ligne. | Hash simplifié : plus rapide mais moins crédible en soutenance |
+| **Difficulté de 3 zéros** | Assez pour que le minage dure environ une seconde et soit visible, assez peu pour ne pas bloquer un poste de TP. | 4 zéros : 16 fois plus long (proposé en option à l'étape 5) |
+| **Ambiance bureau d'enquêteur** (nuit, lampe ambrée, halo lumineux) | Cohérente avec le récit, et le fond sombre fait ressortir les couleurs d'état. | Fond blanc neutre : moins immersif |
+| **Qualité adaptative** | Le halo (bloom) se coupe automatiquement si l'ordinateur passe sous 30 images/s, pour respecter la contrainte de 30 FPS. | Toujours sans effet : moins spectaculaire |
+
+### Notion 1 — Structure d'un bloc
+- **Représentation** : un cube translucide, avec son numéro et son opération écrits sur la face avant. Un clic l'agrandit et affiche ses 4 champs dans le panneau.
+- **Pourquoi** : le cube évoque une « boîte » qui contient quelque chose ; la face avant donne l'essentiel, le panneau donne le détail sans surcharger la 3D.
+- **Limite** : un vrai bloc contient des centaines de transactions ; ici une seule, pour la lisibilité.
+
+### Notion 2 — Chaînage cryptographique
+- **Représentation** : un tube lumineux entre deux cubes. Il est vert quand le bloc suivant a noté la bonne empreinte, rouge sinon. Dans le labo, l'empreinte est recalculée à chaque lettre tapée et le nombre de caractères changés est affiché.
+- **Pourquoi** : le tube matérialise le champ « empreinte du précédent », qui est invisible dans un vrai registre. Taper soi-même montre l'effet avalanche mieux qu'une explication.
+- **Limite** : le tube suggère un lien physique, alors qu'il s'agit d'une simple copie de texte (expliqué dans le panneau).
+
+### Notion 3 — Immutabilité et détection de falsification
+- **Représentation** : la copie de Léa apparaît grise, puis les blocs se colorent ; à partir du bloc 7, ils tombent au rouge l'un après l'autre (effet domino) avec une gerbe d'étincelles. Le panneau compare côte à côte « empreinte recalculée » et « empreinte notée dans le bloc suivant ».
+- **Pourquoi** : le domino rend visible que la modification d'un bloc touche **tous les suivants**, pas seulement lui. La comparaison des deux empreintes donne la preuve « technique ».
+- **Limite** : « immuable » ne veut pas dire « impossible à modifier » : on peut modifier sa copie, mais cela se voit et elle est rejetée (étape 4).
+
+### Notion 4 — Réseau et décentralisation
+- **Représentation** : 4 bureaux reliés par des câbles en pointillé, sans élément central ; chacun porte sa mini-chaîne au-dessus de lui. Une opération est une sphère lumineuse qui saute de voisin en voisin.
+- **Pourquoi** : le bureau personnifie le nœud (« l'ordinateur de Marc ») ; la mini-chaîne au-dessus de chacun montre qu'il a sa **propre copie**. Les câbles maillés, sans centre, montrent l'absence de serveur.
+- **Limite** : un vrai réseau compte des milliers de nœuds ; la majorité y est déterminée par le travail cumulé, pas par un vote à main levée.
+
+### Notion 5 — Validation et minage
+- **Représentation** : un gros cube qui tourne pendant que le nonce et l'empreinte défilent ; il s'arrête et passe au vert quand l'empreinte commence par les zéros exigés. La difficulté se règle de 1 à 4 zéros. Puis une course : rangée « Léa » (1 ordinateur) contre rangée « Réseau » (3 ordinateurs).
+- **Pourquoi** : le défilement montre que le minage est une recherche **par essais**, pas un calcul intelligent. Régler la difficulté fait sentir que chaque zéro multiplie le travail par 16. La course montre pourquoi un tricheur seul ne peut pas rattraper le réseau.
+- **Limite** : la course est simulée (vitesses fixes) ; les vitesses réelles dépendent du matériel.
+
+### Notion 6 — Comparaison PoW / PoS
+- **Représentation** : en PoW, une barre de calcul monte à côté de chaque bureau et un compteur d'énergie augmente ; le premier arrivé écrit le bloc. En PoS, une pile de pièces dorées par bureau (la caution) ; un tirage pondéré désigne le validateur ; la pile de Léa fond quand elle triche.
+- **Pourquoi** : la barre et le compteur rendent visible le **gaspillage** d'énergie du PoW ; la pile de pièces rend concrète la **mise en jeu** et la sanction du PoS. Un tableau comparatif résume avantages et limites.
+- **Limite** : le PoS réel (Ethereum) utilise des comités de validateurs et des attestations, simplifiés ici en un seul tirage.
+
+### Notion 7 — Cycle de vie d'une transaction et attaque
+- **Représentation** : une sphère dorée « signée par Émile » part de son ordinateur, se propage aux 4 nœuds, qui s'allument en vert un par un (validation), puis un bloc 7 apparaît sur toutes les chaînes, suivi des blocs 8 et 9 (confirmations). Pour la double dépense, deux sphères partent de chez Léa ; la seconde devient rouge et éclate.
+- **Pourquoi** : découper en 5 étapes déclenchées par l'utilisateur lui laisse le temps de comprendre chacune. La double dépense est l'attaque qui a motivé l'invention de Bitcoin [S1].
+- **Limite** : la signature numérique est mentionnée mais pas montrée en détail ; l'attaque des 51 % est expliquée en texte.
 
 ---
 
@@ -99,3 +155,4 @@
 | Date | Outil | Usage | Vérification |
 |---|---|---|---|
 | 13/10/2026 | Claude | Aide à la rédaction des fiches de recherche à partir des sources citées | Sources ouvertes et relues, contenu reformulé et compris |
+| 04/11/2026 | Claude | Aide au développement de la scène Three.js et à la rédaction du storyboard et des choix de représentation | Code relu et testé par l'équipe ; chaque choix discuté et validé |
