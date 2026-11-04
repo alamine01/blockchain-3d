@@ -16,7 +16,7 @@ export class BlockMesh extends THREE.Group {
     super();
     this.size = size;
     const geo = new THREE.BoxGeometry(size, size, size);
-    this.mat = new THREE.MeshStandardMaterial({ color: C.block, roughness: 0.45, metalness: 0.1, transparent: true, opacity: 0.92 });
+    this.mat = new THREE.MeshPhysicalMaterial({ color: C.block, roughness: 0.12, metalness: 0.05, clearcoat: 1, clearcoatRoughness: 0.08, transparent: true, opacity: 0.82, envMapIntensity: 0.9 });
     this.box = new THREE.Mesh(geo, this.mat);
     this.add(this.box);
     this.edgeMat = new THREE.LineBasicMaterial({ color: C.ok });
@@ -35,7 +35,7 @@ export class BlockMesh extends THREE.Group {
 
   setText(title, line2 = '', line3 = '', color3 = CSS.ink) {
     this.label?.draw([
-      { text: title, size: 40, font: FONT_TITLE, weight: 400, color: CSS.warn },
+      { text: title, size: 52, font: FONT_TITLE, weight: 800, color: CSS.warn },
       { text: line2, size: 28, weight: 400, color: CSS.muted },
       { text: line3, size: 34, color: color3 },
     ]);
@@ -147,19 +147,37 @@ export class Station extends THREE.Group {
     super();
     this.engine = engine;
     this.name = name;
+    // Bureau sombre et laqué, avec une fine bande lumineuse sur le devant.
     const desk = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 0.8, 1.4),
-      new THREE.MeshStandardMaterial({ color: 0x2e2620, roughness: 0.85 }),
+      new THREE.BoxGeometry(2.8, 0.12, 1.5),
+      new THREE.MeshStandardMaterial({ color: 0x16120f, roughness: 0.3, metalness: 0.4 }),
     );
-    desk.position.y = -0.8;
+    desk.position.y = -0.45;
     this.add(desk);
-    this.frameMat = new THREE.MeshStandardMaterial({ color: 0x1b1f27, emissive: 0x000000 });
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.35, 0.12), this.frameMat);
-    frame.position.y = 0.3;
+    for (const x of [-1.25, 1.25]) {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.75, 1.3), new THREE.MeshStandardMaterial({ color: 0x0d0f13, metalness: 0.8, roughness: 0.3 }));
+      leg.position.set(x, -0.83, 0);
+      this.add(leg);
+    }
+    this.stripMat = new THREE.MeshBasicMaterial({ color: 0x6f84a6 });
+    const strip = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.025, 0.02), this.stripMat);
+    strip.position.set(0, -0.45, 0.76);
+    this.add(strip);
+    // Dossier « confidentiel » posé sur le bureau.
+    const folder = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.04, 0.55), new THREE.MeshStandardMaterial({ color: 0xa8854a, roughness: 0.8 }));
+    folder.position.set(-0.85, -0.37, 0.35);
+    folder.rotation.y = 0.25;
+    this.add(folder);
+    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0xe8e4da, roughness: 0.3 }));
+    cup.position.set(0.95, -0.29, 0.4);
+    this.add(cup);
+    this.frameMat = new THREE.MeshStandardMaterial({ color: 0x0c0e12, emissive: 0x000000, metalness: 0.7, roughness: 0.25 });
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.3, 0.06), this.frameMat);
+    frame.position.y = 0.4;
     this.add(frame);
     this.screen = textTexture(512, 320);
     const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.95, 1.2), new THREE.MeshBasicMaterial({ map: this.screen.tex }));
-    screen.position.set(0, 0.3, 0.07);
+    screen.position.set(0, 0.4, 0.035);
     this.add(screen);
     this.hitboxes = [desk, frame, screen];
     this.setStatus('ordinateur');
@@ -168,15 +186,15 @@ export class Station extends THREE.Group {
   setStatus(text, color = CSS.muted) {
     this.status = text;
     this.screen.draw([
-      { text: this.name, size: 76, font: FONT_TITLE, weight: 400, color: CSS.ink },
-      { text, size: 40, weight: 600, color },
-    ], '#10141b');
+      { text: this.name.toUpperCase(), size: 96, font: FONT_TITLE, weight: 800, color: CSS.ink },
+      { text: text.toUpperCase(), size: 34, weight: 600, color },
+    ], '#0b1018');
   }
 
   setChain(blocks) {
     if (this.chain) { this.chain.dispose(); disposeTree(this.chain); }
     this.chain = new ChainView(this.engine, blocks, { size: 0.4, spacing: 0.58, label: false, slots: 9 });
-    this.chain.position.y = 1.75;
+    this.chain.position.y = 1.65;
     this.add(this.chain);
     return this.chain;
   }

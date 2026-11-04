@@ -5,16 +5,17 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 export const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export const C = {
-  bg: 0x0f1218, floor: 0x151922, ok: 0x4cc38a, bad: 0xe5534b, warn: 0xe0b04a,
+  bg: 0x07090d, floor: 0x0b0e13, ok: 0x4cc38a, bad: 0xe5534b, warn: 0xe0b04a,
   ink: 0xe8e4da, muted: 0x8b8f98, block: 0x26303d, packet: 0xe0b04a,
 };
 export const CSS = { ok: '#4cc38a', bad: '#e5534b', warn: '#e0b04a', ink: '#e8e4da', muted: '#9a9ea7' };
 export const FONT = '"IBM Plex Sans", system-ui, sans-serif';
-export const FONT_TITLE = '"Special Elite", "Courier New", monospace';
+export const FONT_TITLE = '"Big Shoulders Display", "Arial Narrow", sans-serif';
 
 const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
@@ -22,11 +23,16 @@ export function createEngine(container) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
   container.prepend(renderer.domElement);
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(C.bg);
-  scene.fog = new THREE.Fog(C.bg, 26, 55);
+  scene.fog = new THREE.Fog(C.bg, 24, 58);
+  // Reflets doux sur le verre et le sol, calculés une seule fois au chargement.
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
 
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
   camera.position.set(0, 13, -12);
@@ -38,24 +44,40 @@ export function createEngine(container) {
   controls.maxPolarAngle = Math.PI * 0.49;
   controls.target.set(0, 0, -30);
 
-  scene.add(new THREE.HemisphereLight(0xc9d6ff, 0x1a1410, 1.0));
-  const key = new THREE.DirectionalLight(0xfff1d6, 1.5);
+  scene.add(new THREE.HemisphereLight(0x8aa4d6, 0x0a0806, 0.35));
+  const key = new THREE.DirectionalLight(0xfff1d6, 0.8);
   key.position.set(6, 14, 8);
   scene.add(key);
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(220, 220),
-    new THREE.MeshStandardMaterial({ color: C.floor, roughness: 1 }),
+    new THREE.MeshStandardMaterial({ color: C.floor, roughness: 0.32, metalness: 0.55, envMapIntensity: 0.35 }),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = -1.2;
   scene.add(floor);
-  const grid = new THREE.GridHelper(220, 110, 0x2a303b, 0x1c212a);
-  grid.position.y = -1.19;
-  scene.add(grid);
+
+  // Flaques de lumière chaude sous chaque zone de l'enquête.
+  const pool = document.createElement('canvas');
+  pool.width = pool.height = 256;
+  const pg = pool.getContext('2d');
+  const grad = pg.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grad.addColorStop(0, 'rgba(255,190,110,0.35)');
+  grad.addColorStop(0.5, 'rgba(255,170,90,0.10)');
+  grad.addColorStop(1, 'rgba(255,170,90,0)');
+  pg.fillStyle = grad;
+  pg.fillRect(0, 0, 256, 256);
+  const poolTex = new THREE.CanvasTexture(pool);
+  for (const [z, size] of [[0, 26], [18, 14], [-30, 26], [-60, 18]]) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size * 0.7),
+      new THREE.MeshBasicMaterial({ map: poolTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.set(0, -1.18, z);
+    scene.add(m);
+  }
 
   // Lampe d'enquêteur : un cône de lumière chaude au-dessus de chaque zone.
   for (const z of [0, 18, -30, -60]) {
-    const lamp = new THREE.SpotLight(0xffc878, 60, 30, Math.PI / 5, 0.6, 1.6);
+    const lamp = new THREE.SpotLight(0xffc878, 140, 34, Math.PI / 4.5, 0.7, 1.5);
     lamp.position.set(0, 12, z + 2);
     lamp.target.position.set(0, -1.2, z);
     scene.add(lamp, lamp.target);
@@ -79,7 +101,7 @@ export function createEngine(container) {
   // Halo lumineux (bloom) sur les éléments brillants : liens, arêtes, paquets.
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.85, 0.55, 0.62);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.9, 0.6, 0.55);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const forceHQ = new URLSearchParams(location.search).has('hq');
@@ -91,6 +113,9 @@ export function createEngine(container) {
     renderer.setSize(w, h, false);
     composer.setSize(w, h);
     camera.aspect = w / h;
+    // Sur grand écran, le panneau couvre la droite : on décale le centre de l'image vers la gauche.
+    const off = w > 900 ? 228 : 0;
+    if (off) camera.setViewOffset(w, h, off, 0, w, h); else camera.clearViewOffset();
     camera.updateProjectionMatrix();
   }
   new ResizeObserver(resize).observe(container);

@@ -110,7 +110,10 @@ Le parcours est linéaire (9 écrans) avec un retour possible à tout moment. Ch
 | **Fil rouge « enquête »** | L'utilisateur a une raison de manipuler chaque notion (elle devient un indice). La méfiance entre héritiers illustre le problème de confiance que résout la blockchain. | « Alice paie Bob » : clair mais passif et vu partout |
 | **Vraie fonction SHA-256** | Les empreintes affichées sont de vraies empreintes (comme Bitcoin) : on peut les vérifier avec n'importe quel outil en ligne. | Hash simplifié : plus rapide mais moins crédible en soutenance |
 | **Difficulté de 3 zéros** | Assez pour que le minage dure environ une seconde et soit visible, assez peu pour ne pas bloquer un poste de TP. | 4 zéros : 16 fois plus long (proposé en option à l'étape 5) |
-| **Ambiance bureau d'enquêteur** (nuit, lampe ambrée, halo lumineux) | Cohérente avec le récit, et le fond sombre fait ressortir les couleurs d'état. | Fond blanc neutre : moins immersif |
+| **Ambiance polar moderne** (nuit, lampes ambrées, blocs en verre avec reflets, halo lumineux) | Cohérente avec le récit d'enquête ; le fond sombre fait ressortir les couleurs d'état. Un rendu soigné donne envie d'explorer. | Fond blanc neutre : moins immersif |
+| **Mur des preuves** (suspects en haut, preuves reliées à Léa par des fils rouges) | Image universelle de l'enquête. Une preuve s'épingle à chaque étape terminée : l'utilisateur **voit sa progression** et comprend que chaque notion est un indice. | Simple barre de progression : n'explique rien |
+| **Écran-titre et tampon « Affaire classée »** | Un début et une fin marqués structurent l'expérience comme un récit ; le tampon récompense la bonne réponse. | Arrivée directe dans la scène : moins mémorable |
+| **Panneau translucide sur scène plein écran** | La 3D occupe tout l'écran ; le texte reste lisible grâce au flou d'arrière-plan. Sur téléphone, le panneau passe sous la scène. | Écran partagé en deux : scène plus petite |
 | **Qualité adaptative** | Le halo (bloom) se coupe automatiquement si l'ordinateur passe sous 30 images/s, pour respecter la contrainte de 30 FPS. | Toujours sans effet : moins spectaculaire |
 
 ### Notion 1 — Structure d'un bloc

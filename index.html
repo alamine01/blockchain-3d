@@ -7,7 +7,7 @@
   <meta name="description" content="Une enquête interactive en 3D pour comprendre le fonctionnement d'une blockchain.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=Special+Elite&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.css">
   <script type="importmap">
     { "imports": {
@@ -18,10 +18,22 @@
 </head>
 <body>
   <header class="topbar">
+    <p class="brand"><span class="dot" aria-hidden="true"></span>Dossier 2026-07</p>
     <h1>L'Affaire Émile</h1>
-    <p class="sub">Une enquête dans une blockchain</p>
     <button type="button" id="glossBtn" class="ghost">Glossaire</button>
   </header>
+
+  <section id="intro" aria-labelledby="introTitle">
+    <div class="intro-inner">
+      <p class="kicker">Dossier n° 2026-07 · Succession d'Émile B.</p>
+      <h2 id="introTitle">L'Affaire<br>Émile</h2>
+      <p class="lede">Un grand-père, quatre héritiers, un registre que personne ne peut falsifier… en théorie. Menez l'enquête et découvrez comment fonctionne une blockchain.</p>
+      <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
+      <p class="meta-line">9 étapes · environ 15 minutes · souris ou écran tactile</p>
+    </div>
+  </section>
+
+  <div id="stamp" hidden role="status" aria-live="assertive"><span>Affaire classée</span></div>
 
   <div id="stage">
     <div id="fps" aria-hidden="true"></div>

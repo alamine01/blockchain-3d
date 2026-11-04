@@ -1,6 +1,6 @@
 // Les 9 étapes de « L'Affaire Émile ». Chaque étape = une notion + une interaction.
 import * as THREE from 'three';
-import { C, CSS, makeSprite } from './engine.js';
+import { C, CSS, FONT_TITLE, makeSprite } from './engine.js';
 import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js';
 import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js';
 
@@ -11,7 +11,7 @@ export const AREAS = {
   mine: new THREE.Vector3(0, 0, -60),
 };
 export const CAMERAS = {
-  nodes: [[0, 12.5, -13], [0, 0.6, -30]],
+  nodes: [[0, 10.5, -11.5], [0, 1.2, -32]],
   registre: [[0, 5, 17], [0, 0, 0]],
   labo: [[0, 3.2, 27.5], [0, 0.2, 18]],
   mine: [[0, 4.5, -48.5], [0, 1.4, -60]],
@@ -43,7 +43,7 @@ function addLine(el, html, cls = '') {
   el.scrollTop = el.scrollHeight;
 }
 function titleSprite(ctx, text, pos, width = 8) {
-  const s = makeSprite([{ text, size: 54, color: CSS.warn, font: '"Special Elite", monospace', weight: 400 }], width);
+  const s = makeSprite([{ text: text.toUpperCase(), size: 64, color: CSS.warn, font: FONT_TITLE, weight: 800 }], width);
   s.position.copy(pos);
   ctx.group.add(s);
   return s;
@@ -719,6 +719,7 @@ export const steps = [
     retenir: `Une blockchain ne se modifie jamais : <strong>on la complète</strong>. Grâce aux empreintes, aux copies partagées et au consensus, <strong>personne ne peut tricher seul</strong>, sans avoir besoin de faire confiance à un banquier ou à un notaire.`,
     enter(ctx) {
       setupStations(ctx);
+      ctx.board.markGuilty(false);
       const root = ctx.ui.html(`<div class="row">${NAMES.map((n) => `<button type="button" data-n="${n}">${n}</button>`).join('')}</div>
         <div id="out" class="out" aria-live="polite"></div>`);
       const out = root.querySelector('#out');
@@ -726,6 +727,8 @@ export const steps = [
         out.innerHTML = '';
         if (n === 'Léa') {
           ctx.stations['Léa'].setStatus('COUPABLE', CSS.bad);
+          ctx.board.markGuilty(true);
+          ctx.ui.stamp();
           ctx.stations['Léa'].flash(C.bad, 1500);
           ['Marc', 'Sofia', 'Karim'].forEach((m) => ctx.stations[m].flash(C.ok, 1500));
           out.innerHTML = `<p class="verdict ok"><strong>Affaire résolue.</strong> Léa a modifié le bloc 7 de sa copie pour changer 500 en 50 000 jetons.</p>
