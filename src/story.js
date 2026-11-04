@@ -1,8 +1,8 @@
 // Les 9 étapes de « L'Affaire Émile ». Chaque étape = une notion + une interaction.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261104d';
-import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261104d';
-import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261104d';
+import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261104e';
+import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261104e';
+import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261104e';
 
 export const AREAS = {
   nodes: new THREE.Vector3(0, 0, -30),
@@ -68,7 +68,8 @@ export const steps = [
   {
     id: 'dossier', title: 'Le dossier', tag: 'Introduction', area: 'nodes',
     story: `<p>Émile, 82 ans, est mort le mois dernier. Passionné d'informatique, il gérait l'argent de la famille avec un <strong>registre partagé</strong> : une blockchain. Chacun de ses quatre petits-enfants en garde une copie sur son ordinateur.</p>
-      <p>Chez le notaire, <strong>Léa</strong> affirme qu'Émile lui a donné <strong>50 000 jetons</strong>. Marc, Sofia et Karim disent que c'est faux.</p>
+      <p class="aside">💰 Dans ce registre, l'argent se compte en <strong>jetons</strong> : une monnaie numérique propre à la famille, qui n'existe que dans le registre. Pour simplifier, imaginez que <strong>1 jeton = 1 euro</strong>. Le bitcoin est un exemple célèbre de jeton.</p>
+      <p>Chez le notaire, <strong>Léa</strong> affirme qu'Émile lui a donné <strong>50 000 jetons</strong> (soit 50 000 €). Marc, Sofia et Karim disent que c'est faux.</p>
       <p>Vous êtes l'enquêteur. Les quatre ordinateurs sont devant vous : trouvez la vérité.</p>`,
     retenir: `Une blockchain est un registre de comptes que <strong>plusieurs personnes conservent en même temps</strong>. Personne ne détient « l'original ».`,
     enter(ctx) {

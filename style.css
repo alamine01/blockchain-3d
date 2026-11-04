@@ -236,3 +236,5 @@ fieldset.diff label:has(input:disabled) { opacity: .5; cursor: default; }
   #hint { display: none; }
 }
 @media (max-width: 1100px) and (min-width: 901px) { #panel { width: 390px; } .topbar { right: 420px; } #stamp { padding-right: 406px; } }
+
+.story p.aside { font-size: 14px; padding: 8px 12px; border-radius: 10px; background: var(--raised); border: 1px solid var(--line); color: #c9c5bb; }
