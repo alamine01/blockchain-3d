@@ -1,16 +1,14 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blockchain 3D</title>
-  <style>
-    html, body { margin: 0; height: 100%; background: #0d1117; color: #e6edf3; font-family: system-ui, sans-serif; overflow: hidden; }
-    #info { position: absolute; top: 16px; left: 16px; max-width: 360px; background: rgba(22,27,34,.9); border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; font-size: 14px; line-height: 1.5; }
-    #info h1 { font-size: 18px; margin: 0 0 6px; }
-    #info code { font-size: 12px; color: #7ee787; word-break: break-all; }
-    #fps { position: absolute; bottom: 12px; right: 12px; font-size: 12px; opacity: .6; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L'Affaire Émile — Blockchain 3D</title>
+  <meta name="description" content="Une enquête interactive en 3D pour comprendre le fonctionnement d'une blockchain.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=Special+Elite&display=swap">
+  <link rel="stylesheet" href="style.css">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -19,11 +17,53 @@
   </script>
 </head>
 <body>
-  <div id="info">
-    <h1>Blockchain 3D</h1>
-    <p id="details">Clique sur un bloc pour voir ce qu'il contient.</p>
+  <header class="topbar">
+    <h1>L'Affaire Émile</h1>
+    <p class="sub">Une enquête dans une blockchain</p>
+    <button type="button" id="glossBtn" class="ghost">Glossaire</button>
+  </header>
+
+  <div id="stage">
+    <div id="fps" aria-hidden="true"></div>
+    <p id="hint" aria-hidden="true">Glisser pour tourner · molette pour zoomer · cliquer sur les objets</p>
   </div>
-  <div id="fps"></div>
+
+  <aside id="panel" aria-labelledby="title">
+    <div class="meta"><span id="tag" class="tag"></span><span id="count"></span></div>
+    <h2 id="title" tabindex="-1"></h2>
+    <div id="story" class="story"><p>Chargement de l'enquête…</p></div>
+    <div id="controls" class="controls"></div>
+    <section class="retenir" aria-labelledby="retenirTitle">
+      <h3 id="retenirTitle">À retenir</h3>
+      <div id="retenir"></div>
+    </section>
+    <nav class="stepnav" aria-label="Étapes de l'enquête">
+      <button type="button" id="prev">← Précédent</button>
+      <ol id="dots"></ol>
+      <button type="button" id="next" class="primary">Suivant →</button>
+    </nav>
+  </aside>
+
+  <dialog id="gloss" aria-labelledby="glossTitle">
+    <h2 id="glossTitle">Glossaire</h2>
+    <dl>
+      <dt>Blockchain</dt><dd>Registre de comptes copié chez tous les participants, dont les pages (blocs) sont enchaînées par des empreintes.</dd>
+      <dt>Bloc</dt><dd>Une page du registre : des opérations, son empreinte, l'empreinte du bloc précédent et un nonce.</dd>
+      <dt>Empreinte (hash)</dt><dd>Code de 64 caractères calculé à partir du contenu d'un bloc (ici avec SHA-256, comme Bitcoin). Une lettre change, toute l'empreinte change.</dd>
+      <dt>Genèse</dt><dd>Le tout premier bloc de la chaîne. Il n'a pas de bloc précédent.</dd>
+      <dt>Nonce</dt><dd>Nombre que l'on fait varier pendant le minage jusqu'à obtenir une empreinte valide.</dd>
+      <dt>Minage</dt><dd>Recherche du nonce qui donne une empreinte commençant par un certain nombre de zéros (la difficulté).</dd>
+      <dt>Nœud</dt><dd>Un ordinateur du réseau qui garde une copie de la chaîne et vérifie les opérations.</dd>
+      <dt>Consensus</dt><dd>Règle commune qui permet aux nœuds de s'accorder sur le prochain bloc sans chef.</dd>
+      <dt>Preuve de travail (PoW)</dt><dd>Le premier qui trouve le nonce écrit le bloc. Utilisée par Bitcoin.</dd>
+      <dt>Preuve d'enjeu (PoS)</dt><dd>Un validateur est tiré au sort selon sa caution, qu'il perd s'il triche. Utilisée par Ethereum.</dd>
+      <dt>Confirmation</dt><dd>Chaque bloc ajouté après celui qui contient une transaction. Plus il y en a, plus elle est sûre.</dd>
+      <dt>Double dépense</dt><dd>Tentative de dépenser deux fois les mêmes jetons. Le réseau refuse la seconde.</dd>
+    </dl>
+    <button type="button" id="glossClose" class="primary">Fermer</button>
+  </dialog>
+
+  <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
