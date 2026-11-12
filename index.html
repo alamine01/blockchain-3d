@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261104e">
+  <link rel="stylesheet" href="style.css?v=20261112a">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -27,11 +27,18 @@
     <div class="intro-inner">
       <p class="kicker">Dossier n° 2026-07 · Succession d'Émile B.</p>
       <h2 id="introTitle">L'Affaire<br>Émile</h2>
-      <p class="lede">Un grand-père, quatre héritiers, un registre que personne ne peut falsifier… en théorie. Menez l'enquête et découvrez comment fonctionne une blockchain.</p>
+      <p class="lede">Émile est mort en laissant un registre de comptes que ses quatre petits-enfants ont chacun en copie. L'une d'eux prétend avoir reçu 50 000 €. Menez l'enquête : chaque indice vous apprendra comment fonctionne une <strong>blockchain</strong>, et pourquoi on ne peut pas la falsifier.</p>
       <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
       <p class="meta-line">9 étapes · environ 15 minutes · souris ou écran tactile</p>
     </div>
   </section>
+
+  <div id="chapter" hidden aria-hidden="true">
+    <div class="bar top"></div><div class="bar bottom"></div>
+    <div class="ch-inner"><p class="ch-num"></p><p class="ch-title"></p><p class="ch-tag"></p></div>
+  </div>
+  <div id="toast" hidden role="status" aria-live="polite"></div>
+  <div id="termPop" hidden role="dialog" aria-label="Définition"><strong></strong><p></p></div>
 
   <div id="stamp" hidden role="status" aria-live="assertive"><span>Affaire classée</span></div>
 
@@ -45,6 +52,10 @@
     <div class="meta"><span id="tag" class="tag"></span><span id="count"></span></div>
     <h2 id="title" tabindex="-1"></h2>
     <div id="story" class="story"><p>Chargement de l'enquête…</p></div>
+    <section id="missions" class="missions" aria-labelledby="missionsTitle">
+      <h3 id="missionsTitle">Votre mission</h3>
+      <ul></ul>
+    </section>
     <div id="controls" class="controls"></div>
     <section class="retenir" aria-labelledby="retenirTitle">
       <h3 id="retenirTitle">À retenir</h3>
@@ -59,25 +70,11 @@
 
   <dialog id="gloss" aria-labelledby="glossTitle">
     <h2 id="glossTitle">Glossaire</h2>
-    <dl>
-      <dt>Blockchain</dt><dd>Registre de comptes copié chez tous les participants, dont les pages (blocs) sont enchaînées par des empreintes.</dd>
-      <dt>Jeton</dt><dd>Unité de monnaie numérique qui n'existe que dans le registre (comme le bitcoin). Dans l'enquête, imaginez que 1 jeton = 1 euro.</dd>
-      <dt>Bloc</dt><dd>Une page du registre : des opérations, son empreinte, l'empreinte du bloc précédent et un nonce.</dd>
-      <dt>Empreinte (hash)</dt><dd>Code de 64 caractères calculé à partir du contenu d'un bloc (ici avec SHA-256, comme Bitcoin). Une lettre change, toute l'empreinte change.</dd>
-      <dt>Genèse</dt><dd>Le tout premier bloc de la chaîne. Il n'a pas de bloc précédent.</dd>
-      <dt>Nonce</dt><dd>Nombre que l'on fait varier pendant le minage jusqu'à obtenir une empreinte valide.</dd>
-      <dt>Minage</dt><dd>Recherche du nonce qui donne une empreinte commençant par un certain nombre de zéros (la difficulté).</dd>
-      <dt>Nœud</dt><dd>Un ordinateur du réseau qui garde une copie de la chaîne et vérifie les opérations.</dd>
-      <dt>Consensus</dt><dd>Règle commune qui permet aux nœuds de s'accorder sur le prochain bloc sans chef.</dd>
-      <dt>Preuve de travail (PoW)</dt><dd>Le premier qui trouve le nonce écrit le bloc. Utilisée par Bitcoin.</dd>
-      <dt>Preuve d'enjeu (PoS)</dt><dd>Un validateur est tiré au sort selon sa caution, qu'il perd s'il triche. Utilisée par Ethereum.</dd>
-      <dt>Confirmation</dt><dd>Chaque bloc ajouté après celui qui contient une transaction. Plus il y en a, plus elle est sûre.</dd>
-      <dt>Double dépense</dt><dd>Tentative de dépenser deux fois les mêmes jetons. Le réseau refuse la seconde.</dd>
-    </dl>
+    <dl id="glossList"></dl>
     <button type="button" id="glossClose" class="primary">Fermer</button>
   </dialog>
 
   <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
-  <script type="module" src="src/main.js?v=20261104e"></script>
+  <script type="module" src="src/main.js?v=20261112a"></script>
 </body>
 </html>

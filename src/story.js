@@ -1,8 +1,8 @@
 // Les 9 étapes de « L'Affaire Émile ». Chaque étape = une notion + une interaction.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261104e';
-import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261104e';
-import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261104e';
+import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261112a';
+import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261112a';
+import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261112a';
 
 export const AREAS = {
   nodes: new THREE.Vector3(0, 0, -30),
@@ -27,6 +27,26 @@ function hashHTML(h, d = DIFFICULTY) {
   return `<code class="hash ${ok ? 'is-ok' : 'is-bad'}"><span class="zeros">${zeros}</span>${h.slice(zeros.length)}</code>`;
 }
 const short = (h) => `${h.slice(0, 10)}…`;
+
+// Effet « décodage » : les caractères d'une empreinte défilent avant de se fixer.
+const HEX = '0123456789abcdef';
+function scramble(container, ms = 450) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  container.querySelectorAll('code.hash').forEach((code) => {
+    const finalHTML = code.innerHTML;
+    const text = code.textContent;
+    const t0 = performance.now();
+    code.classList.add('decoding');
+    const tick = (now) => {
+      const k = Math.min((now - t0) / ms, 1);
+      if (k >= 1 || !code.isConnected) { code.innerHTML = finalHTML; code.classList.remove('decoding'); return; }
+      const fixed = Math.floor(text.length * k);
+      code.textContent = text.slice(0, fixed) + [...text.slice(fixed)].map(() => HEX[(Math.random() * 16) | 0]).join('');
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
 
 function blockPicker(n, label = 'Bloc') {
   return `<div class="blockpick" role="group" aria-label="Choisir un bloc">${Array.from({ length: n }, (_, i) =>
@@ -67,20 +87,24 @@ export const steps = [
   // ---------------------------------------------------------------- 0
   {
     id: 'dossier', title: 'Le dossier', tag: 'Introduction', area: 'nodes',
+    missions: [['read', 'Lire le dossier, puis passer au chapitre 1']],
     story: `<p>Émile, 82 ans, est mort le mois dernier. Passionné d'informatique, il gérait l'argent de la famille avec un <strong>registre partagé</strong> : une blockchain. Chacun de ses quatre petits-enfants en garde une copie sur son ordinateur.</p>
       <p class="aside">💰 Dans ce registre, l'argent se compte en <strong>jetons</strong> : une monnaie numérique propre à la famille, qui n'existe que dans le registre. Pour simplifier, imaginez que <strong>1 jeton = 1 euro</strong>. Le bitcoin est un exemple célèbre de jeton.</p>
-      <p>Chez le notaire, <strong>Léa</strong> affirme qu'Émile lui a donné <strong>50 000 jetons</strong> (soit 50 000 €). Marc, Sofia et Karim disent que c'est faux.</p>
-      <p>Vous êtes l'enquêteur. Les quatre ordinateurs sont devant vous : trouvez la vérité.</p>`,
+      <p>Chez le notaire, <strong>Léa</strong> affirme qu'Émile lui a donné <strong>50 000 jetons</strong> (soit 50 000 €) juste avant sa mort, et sa copie du registre semble le prouver. Si c'est vrai, elle hérite de presque tout. Marc, Sofia et Karim jurent que c'est faux.</p>
+      <p>Vous êtes l'enquêteur. Chaque chapitre vous fait découvrir un principe de la blockchain, et chaque principe devient une <strong>preuve</strong> épinglée sur le mur, derrière les ordinateurs.</p>`,
     retenir: `Une blockchain est un registre de comptes que <strong>plusieurs personnes conservent en même temps</strong>. Personne ne détient « l'original ».`,
     enter(ctx) {
       setupStations(ctx, { chains: false, emile: true });
-      ctx.ui.html(`<button type="button" class="primary" data-next>Ouvrir le dossier</button>`);
+      ctx.ui.html(`<div class="cast">${NAMES.map((n) => `<div><strong>${n}</strong><span>${n === 'Léa' ? 'réclame 50 000 jetons' : 'conteste'}</span></div>`).join('')}</div>
+        <button type="button" class="primary" data-next>Ouvrir le dossier</button>`);
+      ctx.done('read');
     },
   },
 
   // ---------------------------------------------------------------- 1
   {
     id: 'piece', title: 'La pièce à conviction', tag: 'Notion 1 · Structure d’un bloc', area: 'registre',
+    missions: [['open', 'Ouvrir un bloc et lire ses 4 champs'], ['parent', 'Ouvrir le bloc suivant : son « empreinte du bloc précédent » est-elle la même ?']],
     story: `<p>Le notaire vous confie la copie de <strong>Marc</strong>. Le registre est découpé en <strong>blocs</strong>, comme les pages d'un cahier. Chaque bloc garde quelques opérations.</p>
       <p>Cliquez sur un cube pour ouvrir le bloc et lire ce qu'il contient.</p>`,
     retenir: `Un bloc contient : <strong>des données</strong> (les paiements), <strong>son empreinte</strong> (hash), <strong>l'empreinte du bloc précédent</strong> et un <strong>nonce</strong>, le nombre trouvé par le minage.`,
@@ -101,11 +125,15 @@ export const steps = [
         ctx.engine.flyTo(...CAMERAS.registre, 800);
       });
 
+      const opened = new Set();
       function select(i) {
         view.selected = i;
         view.refresh();
         markPicked(root, i);
         ctx.engine.flyTo([view.x(i) + 0.8, 1.6, 7.5], [view.x(i), 0.2, 0], 800);
+        ctx.done('open');
+        if (opened.has(i - 1) || opened.has(i + 1)) ctx.done('parent');
+        opened.add(i);
         const b = chain[i];
         const prevNote = i === 0
           ? `<span class="note">Premier bloc (« genèse ») : il n'a pas de parent, on y met des zéros.</span>`
@@ -118,6 +146,7 @@ export const steps = [
             <dt>Empreinte (hash)</dt><dd>${hashHTML(b.hash)}<span class="note">calculée à partir de tout le contenu du bloc. Elle commence par ${DIFFICULTY} zéros : c'est le « sceau » du minage.</span></dd>
             <dt>Empreinte du bloc précédent</dt><dd>${hashHTML(b.prev, 0)}${prevNote}</dd>
           </dl>`;
+        scramble(root.querySelector('#fields'));
       }
     },
   },
@@ -125,6 +154,7 @@ export const steps = [
   // ---------------------------------------------------------------- 2
   {
     id: 'labo', title: 'Le labo des empreintes', tag: 'Notion 2 · Chaînage cryptographique', area: 'labo',
+    missions: [['edit', 'Changer une seule lettre ou un chiffre dans les données'], ['remine', 'Re-miner ce bloc : le lien avec le suivant est-il réparé ?']],
     story: `<p>Avant d'examiner la copie de Léa, un expert vous montre comment fonctionne une <strong>empreinte</strong> (hash). Voici trois blocs d'essai.</p>
       <p>Modifiez les données d'un bloc, même une seule lettre, et regardez son empreinte et le lien avec le bloc suivant.</p>`,
     retenir: `Le même contenu donne toujours la même empreinte. <strong>La moindre modification donne une empreinte complètement différente.</strong> Comme chaque bloc recopie l'empreinte du précédent, toucher un bloc casse le lien avec le suivant.`,
@@ -158,10 +188,14 @@ export const steps = [
         setData(chain[cur], input.value);
         view.updateLabel(cur);
         render();
+        scramble(root.querySelector('#labNow'), 250);
+        if (chain[cur].data !== original[cur].data) ctx.done('edit');
       });
       root.querySelector('#labMine').addEventListener('click', () => {
         mineSync(chain[cur]);
         render();
+        scramble(root.querySelector('#labNow'));
+        if (chain[cur].data !== original[cur].data) ctx.done('remine');
         root.querySelector('#labOut').innerHTML = cur < 2 && chain[cur + 1].prev !== chain[cur].hash
           ? `<p>Le bloc ${cur + 1} a de nouveau un sceau valide (nonce ${chain[cur].nonce}). Mais le bloc ${cur + 2} garde l'ancienne empreinte : <strong>le lien reste cassé</strong>. Il faudrait re-miner tous les blocs suivants.</p>`
           : `<p>Le bloc ${cur + 1} a de nouveau un sceau valide (nonce ${chain[cur].nonce}).</p>`;
@@ -205,7 +239,8 @@ export const steps = [
   // ---------------------------------------------------------------- 3
   {
     id: 'crime', title: 'La scène du crime', tag: 'Notion 3 · Immutabilité et falsification', area: 'registre',
-    story: `<p>Voici maintenant la copie de <strong>Léa</strong>. Passez la loupe : cliquez sur les blocs un par un. Où la chaîne se casse-t-elle, et pourquoi ?</p>
+    missions: [['find', 'Trouver le bloc falsifié et l’ouvrir'], ['restore', 'Remettre la version d’origine : la chaîne redevient-elle verte ?']],
+    story: `<p>Voici maintenant la copie de <strong>Léa</strong>, celle qui « prouve » les 50 000 jetons. Le scanner de l'enquêteur la vérifie bloc par bloc. Où la chaîne se casse-t-elle, et pourquoi ?</p>
       <p>Ensuite, essayez vous-même : modifiez un bloc, puis remettez la version d'origine.</p>`,
     retenir: `Modifier un ancien bloc change son empreinte. Le bloc suivant ne le reconnaît plus, et <strong>tous les blocs après lui deviennent invalides</strong>, comme des dominos. La falsification se voit tout de suite.`,
     enter(ctx) {
@@ -224,16 +259,47 @@ export const steps = [
         <div id="fields" class="fields"><p class="hint">Cliquez sur un bloc pour l'examiner.</p></div>`);
       root.querySelectorAll('.blockpick button').forEach((b) => b.addEventListener('click', () => select(+b.dataset.i)));
 
-      ctx.later(700).then(() => { view.override = null; update(true); });
+      // Le scanner balaie la chaîne de gauche à droite et colore chaque bloc vérifié.
+      const beam = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.12, 3.2),
+        new THREE.MeshBasicMaterial({ color: 0xffd36b, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }),
+      );
+      const glow = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.6, 3.2),
+        new THREE.MeshBasicMaterial({ color: 0xffb547, transparent: true, opacity: 0.12, depthWrite: false, blending: THREE.AdditiveBlending }),
+      );
+      beam.add(glow);
+      beam.position.set(view.x(0) - 1.5, 0.2, 1);
+      beam.rotation.y = 0;
+      ctx.group.add(beam);
+      view.override = null;
+      view.revealed = -1;
+      update(false);
+      const x0 = view.x(0) - 1.5, x1 = view.x(chain.length - 1) + 1.5;
+      ctx.later(500).then((ok) => ok && ctx.engine.tween(3000, (k) => {
+        beam.position.x = x0 + (x1 - x0) * k;
+        const r = chain.findLastIndex((_, i) => view.x(i) <= beam.position.x);
+        if (r !== view.revealed) { view.revealed = r; update(false); }
+      }, (t) => t)).then(() => {
+        if (!ctx.alive()) return;
+        view.revealed = Infinity;
+        update(false);
+        ctx.engine.tween(400, (k) => { beam.material.opacity = 0.85 * (1 - k); glow.material.opacity = 0.12 * (1 - k); });
+      });
 
       function update(cascade) {
         const st = view.refresh({ cascade });
         const first = st.findIndex((s) => !s.valid);
         const banner = root.querySelector('#banner');
         banner.className = `banner ${first < 0 ? 'ok' : 'bad'}`;
-        banner.textContent = first < 0
-          ? '✓ Chaîne intacte : chaque bloc reconnaît le précédent.'
-          : `✗ Chaîne rompue à partir du bloc ${first + 1}.`;
+        const scanning = view.revealed !== Infinity;
+        banner.textContent = scanning
+          ? 'Scanner en cours…'
+          : first < 0
+            ? '✓ Chaîne intacte : chaque bloc reconnaît le précédent.'
+            : `✗ Chaîne rompue à partir du bloc ${first + 1}.`;
+        if (scanning) banner.className = 'banner';
+        if (!scanning && first < 0 && chain[6].data === ctx.honest[6].data) ctx.done('restore');
         if (cur >= 0) fields(st);
         return st;
       }
@@ -241,6 +307,7 @@ export const steps = [
         cur = i;
         view.selected = i;
         markPicked(root, i);
+        if (i === 6 && chain[6].data !== ctx.honest[6].data) ctx.done('find');
         ctx.engine.flyTo([view.x(i) + 0.8, 1.6, 7.5], [view.x(i), 0.2, 0], 800);
         fields(update(false));
       }
@@ -273,6 +340,7 @@ export const steps = [
   // ---------------------------------------------------------------- 4
   {
     id: 'temoins', title: 'Les témoins', tag: 'Notion 4 · Réseau et décentralisation', area: 'nodes',
+    missions: [['compare', 'Comparer les 4 copies du registre'], ['gossip', 'Diffuser une opération et la suivre de nœud en nœud']],
     story: `<p>Léa répond : « Ma copie est celle d'Émile ! » Il n'existe pourtant <strong>pas de registre central</strong> : chaque petit-enfant est un <strong>nœud</strong> du réseau et garde sa propre copie.</p>
       <p>Cliquez sur un ordinateur pour lire son bloc 7, puis comparez les quatre copies. Regardez aussi comment une nouvelle opération circule.</p>`,
     retenir: `Chaque nœud a une copie complète et vérifie tout lui-même. Les opérations passent <strong>de voisin en voisin</strong>, sans serveur central. Une copie différente de toutes les autres est <strong>rejetée</strong>.`,
@@ -306,6 +374,7 @@ export const steps = [
         const same = NAMES.filter((n) => ctx.stations[n].chain.blocks[6].data === ref);
         addLine(out, `<strong>${same.length} copies sur 4</strong> disent « ${esc(ref)} ». La copie de Léa est la seule différente, et sa chaîne est cassée : les autres nœuds la <strong>rejettent</strong>.`, 'verdict');
         ctx.stations['Léa'].setStatus('COPIE REJETÉE', CSS.bad);
+        ctx.done('compare');
       });
 
       root.querySelector('#gossip').addEventListener('click', async (e) => {
@@ -324,6 +393,7 @@ export const steps = [
         if (!ctx.alive()) return;
         S['Léa'].flash(C.warn);
         addLine(out, `En quelques instants, <strong>tous les nœuds</strong> connaissent l'opération. Personne n'a eu besoin d'un serveur central.`);
+        ctx.done('gossip');
         btn.disabled = false;
       });
     },
@@ -332,6 +402,7 @@ export const steps = [
   // ---------------------------------------------------------------- 5
   {
     id: 'alibi', title: 'L’alibi de Léa', tag: 'Notion 5 · Validation et minage', area: 'mine',
+    missions: [['mine', 'Miner le bloc 10 (essayez aussi avec 0000)'], ['race', 'Lancer la course entre Léa et le réseau']],
     story: `<p>Léa se défend : « Il suffit que je recalcule mes blocs pour que ma copie redevienne valide ! » Pour sceller un bloc, il faut <strong>miner</strong> : trouver un nombre, le <strong>nonce</strong>, qui donne une empreinte commençant par plusieurs zéros.</p>
       <p>Minez le bloc 10 vous-même, puis lancez la course entre Léa et le reste du réseau.</p>`,
     retenir: `Miner, c'est essayer des nonces un par un jusqu'à trouver une empreinte valide : <strong>long à trouver, instantané à vérifier</strong>. Chaque zéro de plus multiplie le travail par 16. Un tricheur seul ne peut pas aller plus vite que tout le réseau.`,
@@ -379,10 +450,17 @@ export const steps = [
               stopMining(); stopMining = null;
               mesh.setState('ok');
               ctx.engine.tween(400, (t) => { mesh.rotation.y *= 1 - t; });
+              sparks(ctx.engine, ctx.group, mesh.position.clone(), C.ok, 90);
+              const sealed = makeSprite([{ text: 'SCELLÉ ✓', size: 80, color: CSS.ok, font: FONT_TITLE, weight: 900 }], 2.6);
+              sealed.position.copy(mesh.position).add(new THREE.Vector3(0, 1.7, 0));
+              ctx.group.add(sealed);
+              ctx.engine.tween(700, (t) => sealed.scale.set(2.6 * (0.6 + 0.4 * t), 0.65 * (0.6 + 0.4 * t), 1));
+              ctx.done('mine');
               $('#mine').textContent = 'Miner à nouveau';
               root.querySelectorAll('[name=diff]').forEach((r) => { r.disabled = false; });
               $('#nonce').textContent = block.nonce;
               $('#hash').innerHTML = hashHTML(block.hash, difficulty);
+              scramble($('#hash'), 300);
               $('#mineOut').innerHTML = `<p class="ok">✓ Trouvé après <strong>${(block.nonce + 1).toLocaleString('fr-FR')} essais</strong> (${((performance.now() - t0) / 1000).toFixed(1)} s).</p>
                 <p>Pour vérifier, les autres nœuds n'ont besoin que d'<strong>un seul calcul</strong> : ils recalculent l'empreinte avec le nonce ${block.nonce} et voient qu'elle commence bien par ${p}.</p>`;
               return;
@@ -435,6 +513,7 @@ export const steps = [
             show();
             if (resealed === 3) {
               stop();
+              ctx.done('race');
               out.innerHTML += `<p class="verdict">Léa a enfin re-miné ses 3 blocs… mais pendant ce temps le réseau en a ajouté ${netCount - 9}. Sa chaîne (9 blocs) est <strong>plus courte</strong> que celle du réseau (${netCount} blocs). Les nœuds suivent la chaîne qui contient le plus de travail : la copie de Léa est ignorée. <strong>Son alibi tombe.</strong></p>`;
             }
           }
@@ -447,6 +526,7 @@ export const steps = [
   // ---------------------------------------------------------------- 6
   {
     id: 'proces', title: 'Le procès', tag: 'Notion 6 · Deux mécanismes de consensus', area: 'nodes',
+    missions: [['pow', 'Lancer une manche en preuve de travail'], ['pos', 'Passer en preuve d’enjeu et tirer un validateur'], ['slash', 'Voir ce que Léa perd si elle triche en preuve d’enjeu']],
     story: `<p>L'avocat de Léa attaque : « Qui a décidé que la chaîne des autres était la bonne ? » Réponse : une <strong>règle commune</strong>, le <strong>consensus</strong>, que tous les nœuds appliquent pour choisir qui ajoute le bloc suivant.</p>
       <p>Comparez les deux règles les plus connues. Basculez de l'une à l'autre et lancez quelques manches.</p>`,
     retenir: `<strong>Preuve de travail (PoW)</strong> : le premier qui trouve le nonce écrit le bloc. Très sûr, mais énormément d'énergie perdue. <strong>Preuve d'enjeu (PoS)</strong> : un validateur est tiré au sort selon sa caution, et il la perd s'il triche. Économe, mais avantage ceux qui possèdent le plus.`,
@@ -487,7 +567,8 @@ export const steps = [
       function appendHonest(name) {
         trimChains();
         const ref = S.Marc.chain.blocks;
-        const blk = nextBlock(ref, `${name} → coffre : 1 jeton`);
+        const ops = ['Sofia → Karim : 10 jetons', 'Karim → Marc : 5 jetons', 'Marc → Sofia : 12 jetons', 'Sofia → Léa : 8 jetons'];
+        const blk = nextBlock(ref, ops[ref.length % ops.length]);
         honestNames.forEach((n) => S[n].chain.append({ ...blk }));
       }
 
@@ -525,13 +606,14 @@ export const steps = [
             S[winner].flash(winner === 'Léa' ? C.bad : C.ok);
             if (winner === 'Léa') {
               const own = S['Léa'].chain.blocks;
-              S['Léa'].chain.append(nextBlock(own, 'Léa → Léa : 1 jeton'));
+              S['Léa'].chain.append(nextBlock(own, 'Émile → Léa : 1 000 jetons'));
               honestNames.forEach((n) => S[n].flash(C.bad));
               addLine(out, `<strong>Léa</strong> a trouvé le nonce la première, mais son bloc s'appuie sur sa copie falsifiée : les trois autres nœuds le <strong>refusent</strong>.`);
             } else {
               appendHonest(winner);
               addLine(out, `<strong>${winner}</strong> a trouvé le nonce le premier : son bloc est ajouté par tous les nœuds honnêtes. Le calcul des 3 autres ordinateurs a été dépensé pour rien.`);
             }
+            ctx.done('pow');
             ctx.later(600).then((ok) => { if (ok) Object.values(bars).forEach((b) => { b.scale.y = 0.01; }); });
           });
           ctx.track(stop);
@@ -569,9 +651,10 @@ export const steps = [
             if (!(await ctx.later(160))) return;
           }
           busy = false;
-          if (pick === 'Léa') { slash(); return; }
+          if (pick === 'Léa') { ctx.done('pos'); slash(); return; }
           S[pick].flash(C.ok);
           appendHonest(pick);
+          ctx.done('pos');
           addLine(out, `<strong>${pick}</strong> (caution ${stakes[pick]} jetons) est tiré au sort. Les autres vérifient son bloc et l'acceptent. Presque aucune énergie n'a été dépensée.`);
         });
         box.querySelector('#fraud')?.addEventListener('click', slash);
@@ -585,6 +668,7 @@ export const steps = [
           });
           labels['Léa'].userData.draw([{ text: '5 jetons (−20)', size: 72, color: CSS.bad }]);
           box.querySelector('#fraud').disabled = true;
+          ctx.done('slash');
           addLine(out, `<strong>Léa</strong> propose un bloc qui s'appuie sur sa copie falsifiée. Les autres validateurs le vérifient et le refusent : <strong>20 de ses 25 jetons de caution sont confisqués</strong>. Tricher lui coûte cher.`, 'bad');
         }
       }
@@ -602,7 +686,8 @@ export const steps = [
   // ---------------------------------------------------------------- 7
   {
     id: 'reconstitution', title: 'La reconstitution', tag: 'Notion 7 · Vie d’une transaction et attaque', area: 'nodes',
-    story: `<p>Pour clore l'affaire, vous rejouez le <strong>vrai</strong> dernier paiement d'Émile, depuis son ordinateur (au centre), étape par étape. Les copies sont remises dans l'état où elles étaient juste avant : 6 blocs.</p>
+    missions: [['life', 'Rejouer les 5 étapes du vrai paiement d’Émile'], ['double', 'Rejouer la double dépense de Léa et voir comment elle est bloquée']],
+    story: `<p>L'ordinateur d'Émile, au centre, a gardé son dernier paiement, <strong>signé</strong> de sa main numérique. Pour clore l'affaire, vous le rejouez étape par étape, à partir de l'état des copies juste avant : 6 blocs.</p>
       <p>Puis vous rejouez une autre ruse de Léa : dépenser deux fois les mêmes jetons.</p>`,
     retenir: `Une transaction est <strong>créée</strong>, <strong>propagée</strong>, <strong>vérifiée</strong> par chaque nœud, <strong>incluse</strong> dans un bloc miné, puis <strong>confirmée</strong> par les blocs suivants. Une <strong>double dépense</strong> est refusée : les jetons sont déjà inscrits comme dépensés.`,
     enter(ctx) {
@@ -677,6 +762,7 @@ export const steps = [
             addLine(out, `Bloc ${j + 1} ajouté par-dessus : <strong>${j - 5} confirmation${j - 5 > 1 ? 's' : ''}</strong>.`);
           }
           addLine(out, `Plus il y a de blocs au-dessus du bloc 7, plus il est difficile à modifier. Le vrai montant était donc bien <strong>500 jetons</strong>, pas 50 000.`, 'verdict');
+          ctx.done('life');
           return ctx.alive();
         }
         return true;
@@ -707,6 +793,7 @@ export const steps = [
         NAMES.forEach((n) => S[n].flash(C.bad));
         addLine(out2, `Karim relaie la transaction B. Chaque nœud vérifie : les 440 jetons de Léa sont <strong>déjà dépensés dans le bloc 10</strong>. B est <strong>refusée partout</strong>.`, 'bad');
         await ctx.engine.tween(800, (t) => bad.scale.setScalar(Math.max(1 - t, 0.01)));
+        ctx.done('double');
         addLine(out2, `Limite : si Léa contrôlait plus de la moitié de la puissance de calcul du réseau (« attaque des 51 % »), elle pourrait réécrire les blocs récents. C'est pour cela qu'on attend plusieurs confirmations.`, 'note');
       });
     },
@@ -715,6 +802,7 @@ export const steps = [
   // ---------------------------------------------------------------- 8
   {
     id: 'verdict', title: 'Le verdict', tag: 'Conclusion', area: 'nodes',
+    missions: [['accuse', 'Désigner le coupable']],
     story: `<p>Vous avez toutes les preuves. Qui a falsifié le registre d'Émile ?</p>
       <p>Cliquez sur l'ordinateur du coupable, ou choisissez son nom.</p>`,
     retenir: `Une blockchain ne se modifie jamais : <strong>on la complète</strong>. Grâce aux empreintes, aux copies partagées et au consensus, <strong>personne ne peut tricher seul</strong>, sans avoir besoin de faire confiance à un banquier ou à un notaire.`,
@@ -730,16 +818,22 @@ export const steps = [
           ctx.stations['Léa'].setStatus('COUPABLE', CSS.bad);
           ctx.board.markGuilty(true);
           ctx.ui.stamp();
+          ctx.done('accuse');
+          ctx.engine.flyTo([0, 3.2, -25.5], [0, 2.3, -41.5], 1600);
           ctx.stations['Léa'].flash(C.bad, 1500);
           ['Marc', 'Sofia', 'Karim'].forEach((m) => ctx.stations[m].flash(C.ok, 1500));
           out.innerHTML = `<p class="verdict ok"><strong>Affaire résolue.</strong> Léa a modifié le bloc 7 de sa copie pour changer 500 en 50 000 jetons.</p>
-            <ul class="proofs">
-              <li><strong>Étape 3</strong> : l'empreinte du bloc 7 ne commence plus par 000, et le bloc 8 ne la reconnaît plus.</li>
-              <li><strong>Étape 4</strong> : sa copie est la seule différente des quatre.</li>
-              <li><strong>Étape 5</strong> : elle ne peut pas re-miner plus vite que tout le réseau.</li>
-              <li><strong>Étape 6</strong> : avec la preuve d'enjeu, sa fraude lui aurait coûté sa caution.</li>
-              <li><strong>Étape 7</strong> : le paiement signé par Émile était de 500 jetons.</li>
-            </ul>
+            <h3>Ce que l'enquête vous a appris</h3>
+            <ol class="recap">
+              <li><strong>Un bloc</strong> garde des données, son empreinte, l'empreinte du bloc précédent et un nonce.</li>
+              <li><strong>L'empreinte</strong> change complètement à la moindre modification, et chaque bloc recopie celle du précédent.</li>
+              <li><strong>Falsifier</strong> le bloc 7 a brisé son sceau et cassé tous les blocs suivants : c'était visible.</li>
+              <li><strong>Le réseau</strong> : chaque nœud a sa copie ; celle de Léa était la seule différente, donc rejetée.</li>
+              <li><strong>Le minage</strong> : re-sceller ses blocs seule était trop lent face au reste du réseau.</li>
+              <li><strong>Le consensus</strong> : en PoW la triche coûte de l'énergie, en PoS elle coûte sa caution.</li>
+              <li><strong>Une transaction</strong> est créée, propagée, vérifiée, incluse puis confirmée ; la double dépense est refusée.</li>
+            </ol>
+            <p class="note">Regardez le mur des preuves : chaque fil rouge mène à Léa.</p>
             <button type="button" class="primary" data-goto="0">Recommencer l'enquête</button>`;
         } else {
           ctx.stations[n].flash(C.warn);
