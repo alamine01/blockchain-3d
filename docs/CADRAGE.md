@@ -50,4 +50,4 @@ Ce fil rouge a été choisi parce qu'une enquête rend l'utilisateur **actif** (
 
 ## 7. Outils
 
-Three.js 0.160 (CDN, sans bundler), SHA-256 implémenté en JavaScript, VS Code, GitHub / GitHub Projects / GitHub Pages, Playwright (tests automatisés du parcours).
+Three.js 0.160 (CDN, sans bundler), SHA-256 implémenté en JavaScript, VS Code, GitHub / GitHub Projects / GitHub Pages, Playwright (tests automatisés du parcours). Tests humains : voir `TESTS-UTILISATEURS.md`.
