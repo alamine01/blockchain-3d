@@ -32,7 +32,7 @@
 | Colonnes exactes : Backlog, À faire, En cours, À vérifier, Terminé | Board du dépôt | *à vérifier sur le board* |
 | Milestones calés sur le calendrier | M1 Cadrage (09/10) → M6 Livraison (15/11) → M7 Soutenance (19/11) | ✓ |
 | Issues granulaires, assignées, liées aux commits/PR | 25+ issues, numéros cités dans les commits, pull request finale | ✓ |
-| 8 fiches hebdomadaires | `docs/suivi/` : *S01 à S07 présentes ; S02 à S05 rédigées a posteriori (signalé)* | *partiel — à justifier* |
+| 8 fiches hebdomadaires | `docs/suivi/` : S01 à S08 présentes ; S02 à S05 rédigées a posteriori et signalées comme telles | *partiel — assumé et expliqué* |
 | Usage de l'IA déclaré | README, CHOIX-MODELISATION, fiches | ✓ |
 | Travail réparti entre les membres | *à compléter : qui a fait quoi* | *à compléter* |
 
@@ -50,7 +50,7 @@
 
 | Critère | Préparation | Auto-évaluation |
 |---|---|---|
-| 20 minutes, démonstration fonctionnelle | *Plan et support : à compléter* | *à faire* |
+| 20 minutes, démonstration fonctionnelle | Support interactif (`docs/soutenance/`) avec chrono de 20 min ; plan minuté, script de démo et questions anticipées dans `docs/SOUTENANCE.md` | ✓ *(à répéter le 19/11)* |
 | Chaque membre peut expliquer tout le projet | *Chaque membre a parcouru `story.js` et sait expliquer chaque étape* | *à confirmer* |
 
 ## Note estimée par le groupe

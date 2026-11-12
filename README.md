@@ -42,6 +42,7 @@ Expérience web interactive en 3D (Three.js) qui fait comprendre le fonctionneme
 | Choix de modélisation (livrable officiel) | [`docs/MMI-R507-projet-blockchain-CHOIX-MODELISATION.md`](docs/MMI-R507-projet-blockchain-CHOIX-MODELISATION.md) |
 | Fiches hebdomadaires | [`docs/suivi/`](docs/suivi/) |
 | Tests utilisateurs | [`docs/TESTS-UTILISATEURS.md`](docs/TESTS-UTILISATEURS.md) |
+| Support de soutenance | [`docs/soutenance/`](docs/soutenance/) · plan et questions : [`docs/SOUTENANCE.md`](docs/SOUTENANCE.md) |
 | Auto-évaluation | [`docs/MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md`](docs/MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md) |
 
 ## Lancer le projet en local

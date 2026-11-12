@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soutenance — L'Affaire Émile</title>
+<meta name="description" content="Support de soutenance du projet R507 : L'Affaire Émile, enquête 3D pour comprendre la blockchain.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#07090d; --panel:rgba(13,17,24,.78); --raised:rgba(255,255,255,.05); --line:rgba(255,255,255,.11);
+  --ink:#ece8de; --muted:#9aa0ab; --accent:#f0b54a; --accent-ink:#1a1206; --ok:#4fd18f; --bad:#ff5a4f;
+  --display:"Big Shoulders Display","Arial Narrow",sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);overflow:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60% 55% at 50% 42%,rgba(240,181,74,.10),transparent 70%),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.6) 100%)}
+
+/* ---------- diapositives ---------- */
+.deck{position:fixed;inset:0;z-index:1}
+section{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:clamp(28px,5vw,80px) clamp(24px,7vw,120px);gap:18px}
+section.on{display:flex;animation:in .5s ease both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.kicker{margin:0;font:600 12px var(--mono);letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
+h1{margin:0;font:900 clamp(56px,11vw,150px)/.85 var(--display);text-transform:uppercase}
+h2{margin:0;font:900 clamp(34px,5.4vw,70px)/.95 var(--display);text-transform:uppercase;text-wrap:balance}
+p{margin:0;max-width:62ch}
+.lede{font-size:clamp(17px,1.7vw,21px);color:#d6d2c8}
+.muted{color:var(--muted)}
+strong{color:var(--accent);font-weight:600}
+ul{margin:0;padding-left:22px;display:grid;gap:10px;max-width:70ch}
+li::marker{color:var(--accent)}
+.big{font-size:clamp(18px,1.9vw,23px)}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);display:grid;gap:6px;align-content:start}
+.card h3{margin:0;font:800 21px var(--display);text-transform:uppercase;color:var(--accent)}
+.card p{font-size:15px;color:#d6d2c8}
+.card .no{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+
+table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.35vw,16px)}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{color:var(--accent);font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+tbody th{font-weight:600;color:var(--ink);width:30%}
+
+.stat{display:flex;gap:clamp(18px,4vw,56px);flex-wrap:wrap}
+.stat div{display:grid;gap:2px}
+.stat b{font:900 clamp(38px,5vw,64px)/1 var(--display);color:var(--accent)}
+.stat span{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+.demo-cue{border:2px dashed rgba(240,181,74,.55);border-radius:18px;padding:clamp(20px,3vw,34px);background:rgba(240,181,74,.06);display:grid;gap:12px;max-width:none}
+.demo-cue h2{color:var(--accent)}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:8px;max-width:none}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:baseline;font-size:clamp(14px,1.5vw,17px)}
+.steps b{font:800 20px var(--display);color:var(--accent)}
+
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:var(--raised);font:600 12px var(--mono);color:var(--muted)}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+a{color:var(--accent)}
+
+/* ---------- barre de contrôle ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:14px;
+  padding:10px clamp(16px,3vw,28px);background:linear-gradient(transparent,rgba(7,9,13,.9) 40%)}
+.bar button{cursor:pointer;font:inherit;font-size:14px;padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:var(--raised);color:var(--ink)}
+.bar button:hover{border-color:rgba(240,181,74,.6);background:rgba(240,181,74,.1)}
+.bar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#num{font:600 13px var(--mono);color:var(--muted)}
+#clock{font:600 15px var(--mono);color:var(--muted);margin-left:auto;padding:6px 12px;border-radius:9px;border:1px solid var(--line)}
+#clock.run{color:var(--ok);border-color:rgba(79,209,143,.45)}
+#clock.over{color:var(--bad);border-color:rgba(255,90,79,.5)}
+#track{position:fixed;left:0;top:0;height:3px;z-index:4;background:linear-gradient(90deg,var(--accent),#ffd68a);box-shadow:0 0 12px var(--accent);transition:width .35s ease}
+.hint{position:fixed;right:clamp(16px,3vw,28px);bottom:52px;z-index:3;font:12px var(--mono);color:var(--muted)}
+@media (max-width:620px){.hint{display:none}.bar button:nth-child(n+4){display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.bar,.hint,#track{display:none}section{display:flex!important;position:static;page-break-after:always;min-height:100vh}}
+</style>
+</head>
+<body>
+<div id="track"></div>
+<div class="deck" id="deck">
+
+<section>
+  <p class="kicker">BUT MMI 3<sup>e</sup> année · R507 · 19 novembre 2026</p>
+  <h1>L'Affaire<br>Émile</h1>
+  <p class="lede">Une enquête en 3D pour comprendre la blockchain<br>sans jamais lire un cours.</p>
+  <p class="muted">Mouhamed Al Amine BAH · <em>binôme</em> — <a href="https://alamine01.github.io/blockchain-3d/">alamine01.github.io/blockchain-3d</a></p>
+</section>
+
+<section>
+  <p class="kicker">Le problème à résoudre</p>
+  <h2>Expliquer la blockchain<br>à quelqu'un qui s'en moque</h2>
+  <ul class="big">
+    <li>Le sujet impose <strong>7 notions abstraites</strong> : hash, chaînage, immutabilité, réseau, minage, consensus, cycle de vie d'une transaction.</li>
+    <li>Le public visé n'a <strong>pas suivi le cours</strong> et ne reçoit <strong>aucune explication orale</strong>.</li>
+    <li>Risque principal : un site qui <em>montre</em> des cubes… et que l'on referme sans avoir rien compris.</li>
+  </ul>
+  <p class="lede">Notre pari : il ne suffit pas de montrer. Il faut donner une <strong>raison</strong> de comprendre.</p>
+</section>
+
+<section>
+  <p class="kicker">Notre parti pris</p>
+  <h2>Transformer chaque notion<br>en indice d'enquête</h2>
+  <p class="lede">Émile est mort. Ses 4 petits-enfants ont chacun une copie de son registre. Léa affirme avoir reçu <strong>50 000 jetons</strong> juste avant le décès — et sa copie semble le prouver.</p>
+  <div class="cols">
+    <div class="card"><h3>Pourquoi une enquête</h3><p>Le problème des héritiers — <em>à qui faire confiance sans autorité ?</em> — est exactement le problème que la blockchain résout.</p></div>
+    <div class="card"><h3>L'utilisateur agit</h3><p>Il ne lit pas : il ouvre, modifie, compare, mine, accuse. Une <strong>mission</strong> par chapitre l'oblige à manipuler la notion.</p></div>
+    <div class="card"><h3>Alternatives écartées</h3><p class="no">« Alice paie Bob » : clair mais passif, et vu dans tous les tutoriels. Métaphore du village : jolie, mais l'utilisateur reste spectateur.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Architecture narrative</p>
+  <h2>9 chapitres, 7 notions</h2>
+  <table>
+    <thead><tr><th>Chapitre</th><th>Notion du sujet</th><th>Ce que l'utilisateur fait</th></tr></thead>
+    <tbody>
+      <tr><th>1 · La pièce à conviction</th><td>1 Structure d'un bloc</td><td>Ouvre un bloc, lit ses 4 champs</td></tr>
+      <tr><th>2 · Le labo des empreintes</th><td>2 Chaînage</td><td>Change une lettre, voit l'empreinte exploser</td></tr>
+      <tr><th>3 · La scène du crime</th><td>3 Immutabilité</td><td>Scanne la copie de Léa, trouve la rupture</td></tr>
+      <tr><th>4 · Les témoins</th><td>4 Réseau</td><td>Compare les 4 copies, diffuse une opération</td></tr>
+      <tr><th>5 · L'alibi de Léa</th><td>5 Minage</td><td>Mine lui-même, lance la course Léa / réseau</td></tr>
+      <tr><th>6 · Le procès</th><td>6 Consensus</td><td>Bascule PoW ↔ PoS, voit la caution confisquée</td></tr>
+      <tr><th>7 · La reconstitution</th><td>7 Transaction + attaque</td><td>Rejoue le paiement, puis la double dépense</td></tr>
+      <tr><th>8 · Le verdict</th><td>Synthèse</td><td>Accuse — et reçoit le récapitulatif des 7 notions</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <div class="demo-cue">
+    <p class="kicker">🎬 Démonstration · 7 minutes</p>
+    <h2>Passage à l'écran</h2>
+    <ol class="steps">
+      <li><b>1</b><span>Écran-titre → chapitre 1 : <strong>ouvrir le bloc 7</strong> (données, empreinte, empreinte du parent, nonce).</span></li>
+      <li><b>2</b><span>Chapitre 2 : changer <strong>un seul chiffre</strong> → 60 caractères sur 64 changent, le lien casse.</span></li>
+      <li><b>3</b><span>Chapitre 3 : le <strong>scanner</strong> balaie la copie de Léa → effet domino rouge à partir du bloc 7.</span></li>
+      <li><b>4</b><span>Chapitre 5 : <strong>miner en direct</strong> à 3 puis 4 zéros, puis la course Léa (1 machine) contre le réseau (3 machines).</span></li>
+      <li><b>5</b><span>Chapitre 6 : <strong>PoS</strong> → la caution de Léa fond de 25 à 5 jetons.</span></li>
+      <li><b>6</b><span>Chapitre 8 : <strong>accuser Léa</strong> → tampon « Affaire classée » et mur des preuves.</span></li>
+    </ol>
+    <p class="muted">Plan B si le réseau tombe : copie locale du dépôt + captures dans <span class="pill">docs/</span></p>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Argumentation · 1/2</p>
+  <h2>Quatre choix que nous défendons</h2>
+  <div class="cols">
+    <div class="card"><h3>Vrai SHA-256</h3><p>Les empreintes affichées sont celles de Bitcoin, vérifiables avec n'importe quel outil en ligne.</p><p class="no">Écarté : un hash « jouet » plus rapide — mais indéfendable en soutenance.</p></div>
+    <div class="card"><h3>Difficulté 3 zéros</h3><p>≈ 1 seconde de minage : assez long pour <em>voir</em> l'effort, assez court pour ne pas bloquer un poste de TP. Réglable de 1 à 4 pour faire sentir le ×16.</p><p class="no">Écarté : difficulté fixe — on ne ressent plus le coût.</p></div>
+    <div class="card"><h3>Scanner bloc par bloc</h3><p>La chaîne se colore <strong>au passage du faisceau</strong> : on voit le moment exact et l'enchaînement du domino.</p><p class="no">Écarté : tout colorer d'un coup — on rate la logique.</p></div>
+    <div class="card"><h3>Mur des preuves</h3><p>Chaque notion comprise épingle une preuve reliée à Léa par un fil rouge : la progression <em>raconte</em> quelque chose.</p><p class="no">Écarté : une barre de progression — n'explique rien.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Argumentation · 2/2</p>
+  <h2>Ce que nous assumons<br>de ne pas modéliser</h2>
+  <ul class="big">
+    <li><strong>Une transaction par bloc</strong> au lieu de centaines — lisibilité d'abord.</li>
+    <li><strong>4 nœuds</strong> au lieu de milliers : la majorité est montrée par comparaison de copies ; la vraie règle (la chaîne au plus grand travail cumulé) est expliquée au chapitre 5.</li>
+    <li><strong>Course et tirages simulés</strong> (vitesses fixées) — en revanche le minage du bloc 10 est un vrai calcul.</li>
+    <li><strong>Signature numérique</strong> nommée et expliquée, mais pas modélisée : les paires de clés sortent du périmètre.</li>
+    <li><strong>PoS simplifié</strong> en un tirage pondéré ; Ethereum utilise des comités de validateurs.</li>
+  </ul>
+  <p class="lede">Dire ce qu'on ne fait pas est une partie du travail de médiation.</p>
+</section>
+
+<section>
+  <p class="kicker">Rendre le vocabulaire franchissable</p>
+  <h2>Le novice ne décroche pas</h2>
+  <div class="cols">
+    <div class="card"><h3>Mots cliquables</h3><p>« empreinte », « nonce », « nœud » s'expliquent <strong>là où ils apparaissent</strong>, sans quitter l'histoire. Définitions issues du glossaire commun du sujet.</p></div>
+    <div class="card"><h3>Missions</h3><p>Une consigne claire par chapitre, cochée automatiquement. Impossible de traverser une notion sans l'avoir manipulée.</p></div>
+    <div class="card"><h3>« À retenir »</h3><p>Une phrase de synthèse par chapitre, reformulée en langage courant.</p></div>
+    <div class="card"><h3>Récapitulatif final</h3><p>Le verdict relie chaque preuve à sa notion : l'utilisateur voit <strong>ce qu'il vient d'apprendre</strong>.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Gestion de projet</p>
+  <h2>GitHub, et ce qu'il raconte</h2>
+  <div class="stat">
+    <div><b>31</b><span>issues &amp; PR</span></div>
+    <div><b>7</b><span>milestones</span></div>
+    <div><b>17</b><span>commits liés aux issues</span></div>
+    <div><b>5</b><span>colonnes imposées</span></div>
+  </div>
+  <ul>
+    <li>Board aux colonnes exactes du sujet : <span class="pill">Backlog</span> <span class="pill">À faire</span> <span class="pill">En cours</span> <span class="pill">À vérifier</span> <span class="pill">Terminé</span>.</li>
+    <li>Milestones calés sur le calendrier commun, du cadrage (9 oct.) à la soutenance (19 nov.).</li>
+    <li><strong>Un retard assumé</strong> : deux semaines sans commit fin octobre. Les fiches S02-S05 ont été rédigées a posteriori — et <strong>signalées comme telles</strong> plutôt que maquillées.</li>
+    <li>Usage de l'IA déclaré à chaque étape : outil, usage, et ce que nous avons vérifié nous-mêmes.</li>
+  </ul>
+</section>
+
+<section>
+  <p class="kicker">Validation</p>
+  <h2>Tests et performance</h2>
+  <table>
+    <thead><tr><th>Exigence du sujet</th><th>Ce que nous avons fait</th><th>Résultat</th></tr></thead>
+    <tbody>
+      <tr><th>≥ 2 testeurs extérieurs</th><td>Protocole écrit : consigne unique, pensée à voix haute, questionnaire avant/après, grille par chapitre</td><td class="ok">à compléter en séance</td></tr>
+      <tr><th>Observations → issues</th><td>Chaque blocage devient une issue liée à un commit</td><td class="ok">processus en place</td></tr>
+      <tr><th>≥ 30 FPS sur poste de TP</th><td>Formes primitives, aucune texture lourde, compteur permanent, <strong>qualité adaptative</strong> (le halo se coupe sous 30 FPS)</td><td class="ok">à mesurer en salle</td></tr>
+      <tr><th>Déploiement en ligne</th><td>GitHub Pages, fichiers versionnés contre le cache</td><td class="ok">en ligne</td></tr>
+      <tr><th>Accessibilité</th><td>Couleurs doublées de texte, navigation clavier complète, <code>aria-live</code>, <code>prefers-reduced-motion</code>, mobile</td><td class="ok">intégré</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <p class="kicker">Bilan</p>
+  <h2>Ce que nous referions<br>autrement</h2>
+  <div class="cols">
+    <div class="card"><h3 class="ok">Ce qui a marché</h3><p>Choisir le fil rouge <strong>avant</strong> de coder. Toute la scène en découle : on n'a jamais eu à se demander « à quoi sert cet écran ? ».</p></div>
+    <div class="card"><h3 class="ok">Ce qui a marché</h3><p>Séparer le <strong>modèle</strong> (<code>chain.js</code>) de la <strong>mise en scène</strong> (<code>story.js</code>) : la logique blockchain est vérifiable indépendamment de la 3D.</p></div>
+    <div class="card"><h3 class="bad">Ce qu'on referait</h3><p>Tenir les <strong>fiches hebdomadaires en temps réel</strong>. Les reconstituer après coup coûte plus cher que de les écrire chaque vendredi.</p></div>
+    <div class="card"><h3 class="bad">Ce qu'on referait</h3><p>Tester <strong>dès le prototype</strong>, pas à la fin : les blocages de vocabulaire se repèrent plus tôt.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Merci</p>
+  <h1>Questions</h1>
+  <p class="lede">« Une blockchain ne se modifie jamais : <strong>on la complète</strong>. »</p>
+  <p class="muted"><a href="https://alamine01.github.io/blockchain-3d/">alamine01.github.io/blockchain-3d</a> · <a href="https://github.com/alamine01/blockchain-3d">github.com/alamine01/blockchain-3d</a></p>
+</section>
+
+</div>
+
+<div class="bar">
+  <button type="button" id="prev" aria-label="Diapositive précédente">←</button>
+  <button type="button" id="next" aria-label="Diapositive suivante">→</button>
+  <span id="num"></span>
+  <button type="button" id="startClock">Démarrer le chrono</button>
+  <button type="button" id="resetClock">Remettre à zéro</button>
+  <span id="clock" role="timer" aria-live="off">20:00</span>
+</div>
+<p class="hint">← → ou Espace · F plein écran · P imprimer en PDF</p>
+
+<script>
+const slides = [...document.querySelectorAll('.deck section')];
+const track = document.getElementById('track');
+const num = document.getElementById('num');
+let i = 0;
+function show(n){
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, k) => s.classList.toggle('on', k === i));
+  track.style.width = ((i + 1) / slides.length * 100) + '%';
+  num.textContent = (i + 1) + ' / ' + slides.length;
+  try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+}
+document.getElementById('prev').onclick = () => show(i - 1);
+document.getElementById('next').onclick = () => show(i + 1);
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON' && e.key === ' ') return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+  if (e.key.toLowerCase() === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
+  if (e.key.toLowerCase() === 'p') print();
+});
+// Chrono de 20 minutes : vert pendant, rouge au-delà.
+const clock = document.getElementById('clock');
+const TOTAL = 20 * 60;
+let left = TOTAL, timer = null;
+function paint(){
+  const over = left < 0, v = Math.abs(left);
+  clock.textContent = (over ? '+' : '') + String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0');
+  clock.classList.toggle('over', over);
+}
+document.getElementById('startClock').onclick = (e) => {
+  if (timer) { clearInterval(timer); timer = null; clock.classList.remove('run'); e.target.textContent = 'Reprendre'; return; }
+  clock.classList.add('run'); e.target.textContent = 'Pause';
+  timer = setInterval(() => { left--; paint(); }, 1000);
+};
+document.getElementById('resetClock').onclick = () => {
+  clearInterval(timer); timer = null; left = TOTAL; clock.classList.remove('run'); paint();
+  document.getElementById('startClock').textContent = 'Démarrer le chrono';
+};
+paint();
+show(parseInt(location.hash.slice(1), 10) - 1 || 0);
+</script>
+</body>
+</html>
