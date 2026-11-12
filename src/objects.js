@@ -1,7 +1,7 @@
 // Objets 3D réutilisables : bloc, chaîne de blocs, ordinateur (nœud) et paquet qui voyage.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js?v=20261104e';
-import { chainStatus, describe } from './chain.js?v=20261104e';
+import { C, CSS, FONT_TITLE, textTexture, disposeTree, reduceMotion } from './engine.js?v=20261112a';
+import { chainStatus, describe } from './chain.js?v=20261112a';
 
 // Couleurs par état : vert = valide, rouge = invalide, ambre = sélectionné / en cours.
 const STATES = {
@@ -60,6 +60,7 @@ export class ChainView extends THREE.Group {
     this.removers = [];
     this.selected = -1;
     this.override = null;
+    this.revealed = Infinity; // pour le balayage du scanner : au-delà, les blocs restent gris
     this.startX = -(((slots ?? blocks.length) - 1) * spacing) / 2;
     blocks.forEach((b, i) => this._add(b, i, false));
     this.refresh();
@@ -114,9 +115,9 @@ export class ChainView extends THREE.Group {
       const s = st[i];
       const mesh = this.meshes[i];
       if (!mesh) return;
-      let state = this.override || (s.valid ? 'ok' : 'bad');
+      let state = this.override || (i > this.revealed ? 'neutral' : s.valid ? 'ok' : 'bad');
       if (i === this.selected) state = 'warn';
-      if (mesh.state === 'ok' && state === 'bad' && this.labelOn) sparks(this.engine, this, mesh.position, C.bad);
+      if (mesh.state !== 'bad' && state === 'bad' && this.labelOn) sparks(this.engine, this, mesh.position, C.bad);
       mesh.setState(state);
       if (this.labelOn) mesh.scale.setScalar(i === this.selected ? 1.12 : 1);
       const link = this.links[i];

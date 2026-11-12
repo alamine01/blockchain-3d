@@ -1,7 +1,7 @@
 // Mur de preuves : les 4 suspects en haut, les preuves en bas, reliées à Léa par des fils rouges.
 // Une preuve s'épingle chaque fois que l'utilisateur termine l'étape correspondante.
 import * as THREE from 'three';
-import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261104e';
+import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261112a';
 
 const SUSPECTS = [
   { name: 'Marc', role: 'petit-fils' },
@@ -13,7 +13,7 @@ const SUSPECTS = [
 const PROOFS = [
   { step: 3, title: 'BLOC 7', text: 'Sceau brisé', sub: 'empreinte ≠ 000…' },
   { step: 4, title: 'COPIES', text: '1 sur 4 différente', sub: 'celle de Léa' },
-  { step: 5, title: 'COURSE', text: 'Chaîne en retard', sub: '9 blocs contre 17' },
+  { step: 5, title: 'COURSE', text: 'Chaîne en retard', sub: '9 blocs contre 18' },
   { step: 6, title: 'CAUTION', text: '20 jetons confisqués', sub: 'preuve d’enjeu' },
   { step: 7, title: 'PAIEMENT', text: '500 jetons', sub: 'signé par Émile' },
 ];

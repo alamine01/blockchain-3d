@@ -1,10 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261104e';
-import { Station } from './objects.js?v=20261104e';
-import { EvidenceBoard } from './board.js?v=20261104e';
-import { makeChain, clone, setData } from './chain.js?v=20261104e';
-import { steps, CAMERAS } from './story.js?v=20261104e';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261112a';
+import { Station } from './objects.js?v=20261112a';
+import { EvidenceBoard } from './board.js?v=20261112a';
+import { makeChain, clone, setData } from './chain.js?v=20261112a';
+import { steps, CAMERAS } from './story.js?v=20261112a';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261112a';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -85,6 +86,76 @@ async function start() {
     dots.appendChild(li);
   });
 
+  // Missions : ce que l'utilisateur doit faire à chaque étape. Elles restent cochées si on revient.
+  const doneMissions = new Map(steps.map((st) => [st.id, new Set()]));
+  function renderMissions() {
+    const s = steps[current];
+    const list = s.missions || [];
+    const box = $('missions');
+    box.hidden = list.length === 0;
+    const done = doneMissions.get(s.id);
+    box.querySelector('ul').innerHTML = list.map(([id, text]) =>
+      `<li class="${done.has(id) ? 'done' : ''}"><span class="check" aria-hidden="true"></span><span>${text}</span><span class="sr-only">${done.has(id) ? ' (fait)' : ' (à faire)'}</span></li>`).join('');
+    const all = list.length === 0 || list.every(([id]) => done.has(id));
+    $('next').classList.toggle('ready', all && current < steps.length - 1);
+    box.classList.toggle('complete', all && list.length > 0);
+  }
+  function completeMission(stepId, id) {
+    const set = doneMissions.get(stepId);
+    if (set.has(id) || steps[current].id !== stepId) return;
+    set.add(id);
+    const list = steps[current].missions || [];
+    renderMissions();
+    if (list.every(([m]) => set.has(m))) toast(current === steps.length - 1 ? 'Enquête terminée' : 'Indice obtenu · étape suivante débloquée');
+  }
+  let toastTimer = null;
+  function toast(text) {
+    const t = $('toast');
+    t.textContent = text;
+    t.hidden = false;
+    t.classList.remove('show');
+    void t.offsetWidth;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+  }
+
+  // Carte de chapitre entre deux étapes (effet générique de série).
+  let chapterTimer = null;
+  function chapterCard(i) {
+    const el = $('chapter');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    el.querySelector('.ch-num').textContent = i === 0 ? 'Prologue' : i === steps.length - 1 ? 'Épilogue' : `Chapitre ${i}`;
+    el.querySelector('.ch-title').textContent = steps[i].title;
+    el.querySelector('.ch-tag').textContent = steps[i].tag;
+    el.hidden = false;
+    el.classList.remove('play');
+    void el.offsetWidth;
+    el.classList.add('play');
+    clearTimeout(chapterTimer);
+    chapterTimer = setTimeout(() => { el.hidden = true; }, 1900);
+  }
+
+  // Définition d'un terme au clic, dans une petite bulle.
+  const pop = $('termPop');
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('.term');
+    if (!t) { if (!e.target.closest('#termPop')) pop.hidden = true; return; }
+    const g = GLOSSARY[+t.dataset.gi];
+    pop.querySelector('strong').textContent = g.term;
+    pop.querySelector('p').textContent = g.def;
+    pop.hidden = false;
+    const r = t.getBoundingClientRect();
+    const w = Math.min(320, window.innerWidth - 32);
+    pop.style.width = `${w}px`;
+    pop.style.left = `${Math.max(16, Math.min(r.left, window.innerWidth - w - 16))}px`;
+    const below = r.bottom + 8;
+    pop.style.top = `${below + pop.offsetHeight > window.innerHeight - 8 ? r.top - pop.offsetHeight - 8 : below}px`;
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') pop.hidden = true; });
+  // Le glossaire complet est généré à partir de la même liste.
+  $('glossList').innerHTML = GLOSSARY.map((g) => `<dt>${g.term}</dt><dd>${g.def}</dd>`).join('');
+
   let current = -1;
   function makeCtx() {
     const c = {
@@ -96,7 +167,8 @@ async function start() {
       alive: () => c.live,
       track: (fn) => c.cleanups.push(fn),
       later: (ms) => new Promise((r) => { const t = setTimeout(() => r(c.live), ms); c.cleanups.push(() => { clearTimeout(t); r(false); }); }),
-      ui: { html(markup) { controls.innerHTML = markup; return controls; }, stamp },
+      ui: { html(markup) { controls.innerHTML = markup; return controls; }, stamp, toast },
+      done: (id) => completeMission(steps[current].id, id),
     };
     engine.scene.add(c.group);
     return c;
@@ -117,6 +189,8 @@ async function start() {
     $('title').textContent = s.title;
     $('story').innerHTML = s.story;
     $('retenir').innerHTML = s.retenir;
+    linkTerms($('story'));
+    pop.hidden = true;
     $('prev').disabled = i === 0;
     $('next').disabled = i === steps.length - 1;
     dots.querySelectorAll('button').forEach((b, k) => {
@@ -124,7 +198,9 @@ async function start() {
       b.classList.toggle('seen', k < i);
     });
     ctx = makeCtx();
+    renderMissions();
     s.enter(ctx);
+    if (!introOpen) chapterCard(i);
     // Sur un écran étroit (téléphone), on recule la caméra pour tout voir.
     const [pos, target] = CAMERAS[s.area];
     const k = engine.camera.aspect < 1 ? 1.9 : 1;
@@ -166,6 +242,7 @@ async function start() {
     const [pos, target] = CAMERAS.nodes;
     const k = engine.camera.aspect < 1 ? 1.9 : 1;
     engine.flyTo(pos.map((v, j) => target[j] + (v - target[j]) * k), target, 3200);
+    setTimeout(() => chapterCard(current), 600);
     $('title').focus({ preventScroll: true });
   });
   if (introOpen) { const idle = engine.onFrame((dt, now) => { if (!introOpen) { idle(); return; } engine.camera.position.set(Math.sin(now / 9000) * 22, 24, -30 + Math.cos(now / 9000) * 22); }); }
@@ -173,7 +250,7 @@ async function start() {
   go(fromHash ? +fromHash[1] : 0);
   document.body.classList.add('ready');
   // Pour les tests automatisés.
-  window.__app = { go, get current() { return current; } };
+  window.__app = { go, get current() { return current; }, missions: doneMissions };
 }
 
 start().catch((err) => {

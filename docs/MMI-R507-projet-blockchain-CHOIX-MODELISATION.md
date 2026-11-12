@@ -114,6 +114,11 @@ Le parcours est linéaire (9 écrans) avec un retour possible à tout moment. Ch
 | **Mur des preuves** (suspects en haut, preuves reliées à Léa par des fils rouges) | Image universelle de l'enquête. Une preuve s'épingle à chaque étape terminée : l'utilisateur **voit sa progression** et comprend que chaque notion est un indice. | Simple barre de progression : n'explique rien |
 | **Écran-titre et tampon « Affaire classée »** | Un début et une fin marqués structurent l'expérience comme un récit ; le tampon récompense la bonne réponse. | Arrivée directe dans la scène : moins mémorable |
 | **Panneau translucide sur scène plein écran** | La 3D occupe tout l'écran ; le texte reste lisible grâce au flou d'arrière-plan. Sur téléphone, le panneau passe sous la scène. | Écran partagé en deux : scène plus petite |
+| **Une mission par étape** (cases à cocher qui se valident toutes seules) | Le novice sait toujours **quoi faire**. Chaque mission oblige à réaliser l'interaction qui illustre la notion : on ne peut pas « passer » une notion sans l'avoir manipulée. Le bouton Suivant s'illumine quand l'indice est obtenu (feedback). | Consigne en texte seul : facile à ignorer |
+| **Mots techniques cliquables** (empreinte, nonce, nœud…) | Le vocabulaire est expliqué **au moment où il apparaît**, sans quitter l'histoire. Les définitions reprennent le glossaire commun du sujet. | Glossaire seulement en fin de page : jamais ouvert |
+| **Cartes de chapitre** entre les étapes (« Chapitre 3 — La scène du crime ») | Découpent l'enquête comme une série : le novice sait où il en est et quelle notion arrive. Bandes noires de cinéma pour l'immersion. | Changement de vue sans transition : perte de repères |
+| **Scanner de l'enquêteur** à l'étape 3 | Les blocs se colorent un par un au passage du faisceau : on **voit** la vérification bloc par bloc et le moment exact où la chaîne casse. | Coloration immédiate : on rate la logique du domino |
+| **Récapitulatif des 7 notions** au verdict | Fait le lien entre l'histoire et le cours : chaque preuve correspond à une notion. Sert d'évaluation douce : si l'utilisateur désigne le bon coupable, il a suivi le raisonnement. | Fin sans synthèse : notions isolées |
 | **Qualité adaptative** | Le halo (bloom) se coupe automatiquement si l'ordinateur passe sous 30 images/s, pour respecter la contrainte de 30 FPS. | Toujours sans effet : moins spectaculaire |
 
 ### Notion 1 — Structure d'un bloc
@@ -153,9 +158,34 @@ Le parcours est linéaire (9 écrans) avec un retour possible à tout moment. Ch
 
 ---
 
-## 4. Usage de l'IA
+## 4. Accessibilité et performance
+
+| Point | Ce que nous avons fait |
+|---|---|
+| Couleurs | Toujours doublées par un texte ou un symbole (✓ / ✗, « COPIE REJETÉE ») pour les personnes daltoniennes. |
+| Clavier | Toutes les actions de la 3D existent aussi en boutons dans le panneau (choix d'un bloc, d'un ordinateur…). Flèches ← → pour changer d'étape, Échap pour fermer une définition. |
+| Lecteurs d'écran | Zones de résultats en `aria-live`, état des missions annoncé (« fait » / « à faire »), libellés sur les boutons sans texte. |
+| Mouvement | Les animations sont désactivées si le système demande de réduire les mouvements (`prefers-reduced-motion`). |
+| Lisibilité | Panneau compact sur petits écrans, mise en page adaptée au téléphone (panneau sous la scène). |
+| Performance (≥ 30 FPS) | Formes simples, aucune texture lourde, aucun modèle 3D externe. Compteur de FPS affiché en permanence. Si l'ordinateur passe sous 30 images/s pendant 3 secondes, le halo lumineux se coupe et la résolution baisse automatiquement (« mode économie »). Mesure sur poste de TP : voir `docs/TESTS-UTILISATEURS.md`. |
+
+## 5. Tests utilisateurs
+
+Protocole, observations et corrections : voir [`TESTS-UTILISATEURS.md`](TESTS-UTILISATEURS.md).
+
+## 6. Limites assumées de la modélisation
+
+- **Une transaction par bloc** (au lieu de centaines) pour que chaque bloc reste lisible.
+- **4 nœuds** au lieu de milliers : la « majorité » est montrée comme une comparaison de copies ; en réalité, c'est la chaîne qui contient le plus de travail qui l'emporte (expliqué à l'étape 5).
+- **La course de l'étape 5 et les manches PoW/PoS sont simulées** (vitesses et tirages fixés pour la lisibilité). En revanche, les empreintes et le minage du bloc 10 utilisent un vrai SHA-256.
+- **La signature numérique** est nommée et expliquée en une phrase, mais pas modélisée (clés publiques/privées hors périmètre).
+- **Le PoS** est simplifié en un tirage pondéré par la caution ; Ethereum utilise des comités de validateurs et des attestations.
+- **Les jetons** sont une monnaie fictive (« 1 jeton = 1 € ») : on garde le vrai vocabulaire mais on le rend concret.
+
+## 7. Usage de l'IA
 
 | Date | Outil | Usage | Vérification |
 |---|---|---|---|
 | 13/10/2026 | Claude | Aide à la rédaction des fiches de recherche à partir des sources citées | Sources ouvertes et relues, contenu reformulé et compris |
 | 04/11/2026 | Claude | Aide au développement de la scène Three.js et à la rédaction du storyboard et des choix de représentation | Code relu et testé par l'équipe ; chaque choix discuté et validé |
+| 12/11/2026 | Claude | Missions par étape, glossaire cliquable, cartes de chapitre, scanner, corrections de cohérence, fiches de suivi a posteriori, protocole de tests | Parcours testé ; textes relus ; chaque membre doit pouvoir expliquer `story.js` étape par étape |

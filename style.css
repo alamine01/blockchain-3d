@@ -238,3 +238,78 @@ fieldset.diff label:has(input:disabled) { opacity: .5; cursor: default; }
 @media (max-width: 1100px) and (min-width: 901px) { #panel { width: 390px; } .topbar { right: 420px; } #stamp { padding-right: 406px; } }
 
 .story p.aside { font-size: 14px; padding: 8px 12px; border-radius: 10px; background: var(--raised); border: 1px solid var(--line); color: #c9c5bb; }
+
+/* ---------- missions ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.missions { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: rgba(0,0,0,.22); transition: border-color .4s, background .4s; }
+.missions h3 { margin: 0 0 6px; font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.missions ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.missions li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; font-size: 14px; color: #d6d2c8; }
+.missions .check { width: 16px; height: 16px; margin-top: 2px; border-radius: 5px; border: 1.5px solid rgba(255,255,255,.3); position: relative; transition: background .25s, border-color .25s; }
+.missions li.done { color: var(--muted); }
+.missions li.done span:nth-child(2) { text-decoration: line-through; text-decoration-color: rgba(79,209,143,.6); }
+.missions li.done .check { background: var(--ok); border-color: var(--ok); box-shadow: 0 0 10px rgba(79,209,143,.6); }
+.missions li.done .check::after { content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px; border: solid #08130d; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.missions.complete { border-color: rgba(79,209,143,.45); background: rgba(79,209,143,.06); }
+.missions.complete h3 { color: var(--ok); }
+#next.ready { animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(240,181,74,.0); } 50% { box-shadow: 0 0 0 6px rgba(240,181,74,.25), 0 0 24px rgba(240,181,74,.5); } }
+
+/* ---------- distribution des rôles (prologue) ---------- */
+.cast { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.cast div { padding: 8px; border-radius: 10px; background: var(--raised); border: 1px solid var(--line); display: grid; gap: 2px; text-align: center; }
+.cast strong { font: 800 18px var(--display); text-transform: uppercase; }
+.cast span { font-size: 11px; color: var(--muted); }
+.cast div:last-child { border-color: rgba(255,90,79,.45); }
+.cast div:last-child span { color: var(--bad); }
+
+/* ---------- mots du glossaire ---------- */
+.term { all: unset; cursor: help; color: inherit; border-bottom: 1px dashed rgba(240,181,74,.7); }
+.term:hover, .term:focus-visible { color: var(--accent); outline: none; }
+#termPop {
+  position: fixed; z-index: 20; padding: 12px 14px; border-radius: 12px; background: var(--glass-strong);
+  border: 1px solid rgba(240,181,74,.45); box-shadow: 0 14px 40px rgba(0,0,0,.5); backdrop-filter: blur(14px);
+}
+#termPop strong { display: block; font: 800 18px var(--display); text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+#termPop p { margin: 0; font-size: 14px; color: #d6d2c8; }
+
+/* ---------- empreinte qui se décode ---------- */
+code.hash.decoding { color: var(--accent); }
+
+/* ---------- toast « indice obtenu » ---------- */
+#toast {
+  position: fixed; z-index: 8; left: calc(50% - 228px); top: 22px; transform: translateX(-50%);
+  padding: 10px 18px 10px 40px; border-radius: 999px; background: rgba(10,26,18,.9); color: var(--ok);
+  border: 1px solid rgba(79,209,143,.5); font-weight: 600; box-shadow: 0 0 30px rgba(79,209,143,.25);
+}
+#toast::before { content: "✓"; position: absolute; left: 16px; }
+#toast.show { animation: toastIn 2.6s ease both; }
+@keyframes toastIn { 0% { opacity: 0; transform: translate(-50%, -12px); } 12%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -6px); } }
+
+/* ---------- carte de chapitre ---------- */
+#chapter { position: fixed; inset: 0; z-index: 7; pointer-events: none; display: grid; place-items: center; padding-right: 456px; }
+#chapter .bar { position: fixed; left: 0; right: 0; height: 9vh; background: #000; transform: scaleY(0); }
+#chapter .bar.top { top: 0; transform-origin: top; }
+#chapter .bar.bottom { bottom: 0; transform-origin: bottom; }
+#chapter .ch-inner { text-align: center; opacity: 0; }
+#chapter p { margin: 0; }
+.ch-num { font: 600 13px var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+.ch-title { font: 900 clamp(48px, 7vw, 96px)/0.9 var(--display); text-transform: uppercase; color: var(--ink); text-shadow: 0 8px 50px rgba(0,0,0,.8); margin: 6px 0 !important; }
+.ch-tag { font: 500 14px var(--body); color: #d6d2c8; text-shadow: 0 2px 12px #000; }
+#chapter.play .bar { animation: bars 1.9s ease both; }
+#chapter.play .ch-inner { animation: chIn 1.9s ease both; }
+@keyframes bars { 0% { transform: scaleY(0); } 18%, 75% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+@keyframes chIn { 0% { opacity: 0; letter-spacing: .2em; filter: blur(8px); } 22%, 70% { opacity: 1; letter-spacing: 0; filter: blur(0); } 100% { opacity: 0; filter: blur(4px); } }
+
+/* ---------- récapitulatif final ---------- */
+.recap { margin: 0; padding-left: 28px; display: grid; gap: 6px; font-size: 14px; }
+.recap li::marker { color: var(--accent); font-family: var(--mono); }
+.out h3 { margin: 6px 0 0; }
+
+@media (max-width: 1100px) and (min-width: 901px) { #chapter { padding-right: 406px; } #toast { left: calc(50% - 203px); } }
+@media (max-width: 900px) {
+  #chapter { padding-right: 0; }
+  #toast { left: 50%; top: 12px; }
+  .cast { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.out:has(.recap) { max-height: none; overflow: visible; }
