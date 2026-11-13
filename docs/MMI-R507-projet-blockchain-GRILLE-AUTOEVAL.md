@@ -1,6 +1,6 @@
 # Grille d'auto-évaluation — L'Affaire Émile
 
-> **Brouillon** organisé selon l'évaluation indicative du sujet (section 7). À recopier dans le **modèle officiel** `MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md` fourni sur Moodle avant la soutenance, et à compléter avec les résultats des tests.
+> Organisée selon l'évaluation indicative du sujet (section 7). Les lignes marquées *à compléter* le seront après les tests utilisateurs et la répétition du 19 novembre.
 
 **Groupe** : Mouhamed Al Amine BAH (@alamine01), Hugo Delpuech (@LeCapet)
 **Démo** : https://alamine01.github.io/blockchain-3d/

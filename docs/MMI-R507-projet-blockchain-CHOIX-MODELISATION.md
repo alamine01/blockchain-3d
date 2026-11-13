@@ -1,6 +1,6 @@
 # Choix de modélisation — Blockchain 3D
 
-> Version de travail (novembre). La structure sera alignée sur le modèle officiel fourni avec le sujet.
+**Groupe** : Mouhamed Al Amine BAH (@alamine01), Hugo Delpuech (@LeCapet) · BUT MMI 3ᵉ année, R507 · novembre 2026
 
 **Projet** : Blockchain 3D — https://alamine01.github.io/blockchain-3d/
 **Public visé** : personne non initiée, sans explication orale.

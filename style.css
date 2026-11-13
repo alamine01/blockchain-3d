@@ -189,9 +189,12 @@ table.cmp tbody th { color: var(--muted); font-weight: 400; width: 34%; }
 .kicker { margin: 0; font: 600 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent);
   animation: monte .8s ease .5s both; }
 
-#introTitle { margin: 0; font: 900 clamp(64px, 13vw, 156px)/0.85 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+#introTitle { margin: 0; font-weight: 900; font-family: var(--display); line-height: .9;
+  font-size: min(clamp(52px, 12vw, 148px), 19vh); text-transform: uppercase; letter-spacing: .01em; }
 /* Chaque ligne du titre se lève derrière un masque, comme un carton de film. */
-#introTitle .ln { display: block; overflow: hidden; padding-bottom: .04em; }
+#introTitle .ln { display: block; overflow: hidden;
+  /* De la place au-dessus pour les accents, rattrapée par la marge : la hauteur visible ne bouge pas. */
+  padding: .2em 0 .08em; margin-top: -.2em; }
 #introTitle .ln > span { display: block; text-shadow: 0 10px 60px rgba(0,0,0,.75); animation: ligne 1s cubic-bezier(.2,.8,.2,1) both; }
 #introTitle .ln:nth-child(1) > span { animation-delay: .75s; }
 #introTitle .ln:nth-child(2) > span { animation-delay: .92s; }
@@ -370,3 +373,10 @@ button.big.loading::before {
 #slowNote { max-width: 46ch; color: var(--accent); }
 #slowNote code { font-size: .95em; }
 #slowNote[hidden] { display: none; }
+
+/* Fenêtre peu haute : on resserre l'écran-titre pour que tout reste visible. */
+@media (max-height: 620px) {
+  .intro-inner { gap: 10px; }
+  .lede { font-size: 15px; }
+  .eyebrow-line { display: none; }
+}
