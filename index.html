@@ -34,11 +34,19 @@
     // Exécuté avant le premier affichage : décide si l'on ouvre sur l'écran-titre
     // ou directement sur un chapitre (adresse se terminant par #etape-N),
     // pour qu'aucun élément de l'autre état n'apparaisse pendant le chargement.
-    document.documentElement.classList.add(
-      /^#etape-[0-8]$/.test(location.hash) ? 'boot-chapitre' : 'boot-titre');
+    var surChapitre = /^#etape-[0-8]$/.test(location.hash);
+    document.documentElement.classList.add(surChapitre ? 'boot-chapitre' : 'boot-titre');
+    // Volet de cinéma : écran noir au départ, il s'ouvrira sur la scène.
+    document.documentElement.classList.add(surChapitre ? 'volet-ouvert' : 'volet-ferme');
+    // Sécurité : si le moteur 3D n'arrive pas, le volet s'ouvre quand même
+    // pour ne jamais laisser l'écran noir.
+    if (!surChapitre) setTimeout(function () {
+      document.documentElement.classList.remove('volet-ferme');
+    }, 2500);
   </script>
 </head>
 <body>
+  <div id="volet" aria-hidden="true"><i></i><i></i></div>
   <header class="topbar">
     <p class="brand"><span class="dot" aria-hidden="true"></span>Dossier 2026-07</p>
     <h1>L'Affaire Émile</h1>
@@ -47,8 +55,9 @@
 
   <section id="intro" aria-labelledby="introTitle">
     <div class="intro-inner">
+      <span class="eyebrow-line" aria-hidden="true"></span>
       <p class="kicker">Dossier n° 2026-07 · Succession d'Émile B.</p>
-      <h2 id="introTitle">L'Affaire<br>Émile</h2>
+      <h2 id="introTitle"><span class="ln"><span>L'Affaire</span></span><span class="ln"><span>Émile</span></span></h2>
       <p class="lede">Émile est mort en laissant un registre de comptes que ses quatre petits-enfants ont chacun en copie. L'une d'eux prétend avoir reçu 50 000 €. Menez l'enquête : chaque indice vous apprendra comment fonctionne une <strong>blockchain</strong>, et pourquoi on ne peut pas la falsifier.</p>
       <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
       <script>

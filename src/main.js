@@ -235,26 +235,52 @@ async function start() {
   const intro = $('intro');
   let introOpen = !fromHash;
   intro.hidden = !introOpen;
-  document.documentElement.classList.toggle('boot-titre', introOpen);
+  const racine = document.documentElement;
+  racine.classList.toggle('boot-titre', introOpen);
   const startBtn = $('introStart');
   function openInvestigation() {
     if (!introOpen) return;
     introOpen = false;
-    document.documentElement.classList.remove('boot-titre');
+    racine.classList.remove('boot-titre');
+    // Coupe de cinéma : le volet se referme, l'écran-titre disparaît derrière, le volet se rouvre sur l'enquête.
+    const doux = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    racine.classList.add('volet-rapide');
+    if (!doux) racine.classList.add('volet-ferme');
     intro.classList.add('leaving');
-    setTimeout(() => { intro.hidden = true; }, 700);
+    setTimeout(() => {
+      intro.hidden = true;
+      racine.classList.remove('volet-ferme');
+      racine.classList.add('volet-ouvert');
+    }, doux ? 0 : 460);
     const [pos, target] = CAMERAS.nodes;
     const k = engine.camera.aspect < 1 ? 1.9 : 1;
     engine.flyTo(pos.map((v, j) => target[j] + (v - target[j]) * k), target, 3200);
-    setTimeout(() => chapterCard(current), 600);
+    setTimeout(() => chapterCard(current), doux ? 300 : 1000);
     $('title').focus({ preventScroll: true });
   }
   startBtn.addEventListener('click', openInvestigation);
-  if (introOpen) { const idle = engine.onFrame((dt, now) => { if (!introOpen) { idle(); return; } engine.camera.position.set(Math.sin(now / 9000) * 22, 24, -30 + Math.cos(now / 9000) * 22); }); }
+  if (introOpen) {
+    // Travelling d'ouverture : la caméra s'approche lentement des bureaux, avec une légère respiration.
+    const depart = new THREE.Vector3(-9, 23, -2), arrivee = new THREE.Vector3(1.5, 12.5, -15.5);
+    const cible = new THREE.Vector3(0, 1, -31);
+    let t = 0;
+    const idle = engine.onFrame((dt, now) => {
+      if (!introOpen) { idle(); return; }
+      t = Math.min(t + dt / 26000, 1);
+      const k = 1 - Math.pow(1 - t, 3);                        // ralentit en arrivant
+      engine.camera.position.lerpVectors(depart, arrivee, k);
+      engine.camera.position.x += Math.sin(now / 7000) * 1.1;
+      engine.camera.position.y += Math.sin(now / 5200) * 0.35;
+      engine.controls.target.copy(cible);
+    });
+  }
   // Ouverture : la caméra descend du ciel vers le réseau familial.
   go(fromHash ? +fromHash[1] : 0);
   // La scène est prête : le bouton redevient actif, et un clic passé pendant le chargement est honoré.
   window.__ready = true;
+  // Le volet ne s'ouvre, et le texte n'entre, qu'une fois la scène prête : rien ne démarre dans le vide.
+  requestAnimationFrame(() => racine.classList.remove('volet-ferme'));
+  setTimeout(() => intro.classList.add('pret'), 2600);
   document.getElementById('slowNote').hidden = true;
   startBtn.classList.remove('loading');
   startBtn.textContent = 'Ouvrir l’enquête';

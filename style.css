@@ -153,21 +153,64 @@ table.cmp tbody th { color: var(--muted); font-weight: 400; width: 34%; }
 #dots button[aria-current="step"] { width: 26px; border-radius: 6px; background: var(--accent); }
 #dots button:hover { background: rgba(240,181,74,.7); }
 
-/* ---------- écran-titre ---------- */
+/* ---------- écran-titre cinématographique ---------- */
+
+/* Volet : deux bandes noires qui s'écartent à l'ouverture, se referment au départ de l'enquête. */
+#volet { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
+#volet i { position: absolute; left: 0; right: 0; height: 50%; background: #000; will-change: transform;
+  transition: transform 1.25s cubic-bezier(.16,.84,.25,1); }
+#volet i:first-child { top: 0; }
+#volet i:last-child  { bottom: 0; }
+.volet-ferme #volet i { transform: translateY(0); }                                   /* écran noir */
+#volet i:first-child { transform: translateY(calc(-100% + 8vh)); }                    /* bandes de cinéma */
+#volet i:last-child  { transform: translateY(calc(100% - 8vh)); }
+.volet-ouvert #volet i:first-child { transform: translateY(-100%); }                  /* plus de bandes */
+.volet-ouvert #volet i:last-child  { transform: translateY(100%); }
+.volet-rapide #volet i { transition-duration: .45s; }
+
 #intro {
   position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 24px;
-  background: linear-gradient(180deg, rgba(7,9,13,.55) 0%, rgba(7,9,13,.2) 40%, rgba(7,9,13,.85) 100%);
-  transition: opacity .7s ease;
+  background: linear-gradient(180deg, rgba(7,9,13,.5) 0%, rgba(7,9,13,.12) 42%, rgba(7,9,13,.8) 100%);
+  transition: opacity .45s ease, transform .45s ease;
 }
-#intro::before, #intro::after { content: ""; position: absolute; left: 0; right: 0; height: 9vh; background: #000; }
-#intro::before { top: 0; } #intro::after { bottom: 0; }
-#intro.leaving { opacity: 0; pointer-events: none; }
+#intro.leaving { opacity: 0; transform: scale(1.04); pointer-events: none; }
 .intro-inner { max-width: 760px; text-align: center; display: grid; gap: 16px; justify-items: center; position: relative; z-index: 1; }
-.kicker { margin: 0; font: 600 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
-#intro h2 { margin: 0; font: 900 clamp(64px, 13vw, 156px)/0.85 var(--display); text-transform: uppercase; letter-spacing: .01em; text-shadow: 0 10px 60px rgba(0,0,0,.6); }
-.lede { margin: 0; max-width: 54ch; color: #d6d2c8; font-size: 17px; }
-.meta-line { margin: 0; font: 12px var(--mono); color: var(--muted); }
-button.big { padding: 14px 28px; font-size: 17px; border-radius: 999px; cursor: pointer; border: 0; box-shadow: 0 0 40px rgba(240,181,74,.35); }
+/* Voile doux sous le texte : la scène reste visible autour, le texte reste lisible dessus. */
+.intro-inner::before { content: ""; position: absolute; inset: -14% -16%; z-index: -1; pointer-events: none;
+  background: radial-gradient(58% 54% at 50% 52%, rgba(7,9,13,.86) 0%, rgba(7,9,13,.62) 52%, rgba(7,9,13,0) 82%); }
+
+/* Entrée échelonnée : chaque élément arrive à son tour, comme un générique. */
+@keyframes monte { from { opacity: 0; transform: translateY(16px); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes trait { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes ligne { from { transform: translateY(102%); } to { transform: translateY(0); } }
+
+.eyebrow-line { width: 92px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform-origin: center; animation: trait .9s ease .25s both; }
+.kicker { margin: 0; font: 600 12px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent);
+  animation: monte .8s ease .5s both; }
+
+#introTitle { margin: 0; font: 900 clamp(64px, 13vw, 156px)/0.85 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+/* Chaque ligne du titre se lève derrière un masque, comme un carton de film. */
+#introTitle .ln { display: block; overflow: hidden; padding-bottom: .04em; }
+#introTitle .ln > span { display: block; text-shadow: 0 10px 60px rgba(0,0,0,.75); animation: ligne 1s cubic-bezier(.2,.8,.2,1) both; }
+#introTitle .ln:nth-child(1) > span { animation-delay: .75s; }
+#introTitle .ln:nth-child(2) > span { animation-delay: .92s; }
+
+.lede { margin: 0; max-width: 54ch; color: #d6d2c8; font-size: 17px; animation: monte .9s ease 1.5s both; }
+.lede strong { color: var(--ink); }
+#introStart { animation: monte .8s ease 1.85s both; }
+.meta-line { margin: 0; font: 12px var(--mono); color: var(--muted); animation: monte .8s ease 2.05s both; }
+button.big { padding: 14px 28px; font-size: 17px; border-radius: 999px; cursor: pointer; border: 0;
+  box-shadow: 0 0 40px rgba(240,181,74,.35); }
+/* Le halo du bouton ne pulse qu'une fois l'entrée terminée. */
+#intro.pret #introStart { animation: halo 2.8s ease-in-out infinite; }
+@keyframes halo { 0%, 100% { box-shadow: 0 0 0 0 rgba(240,181,74,.45), 0 0 40px rgba(240,181,74,.35); }
+                  50% { box-shadow: 0 0 0 12px rgba(240,181,74,0), 0 0 46px rgba(240,181,74,.5); } }
+
+@media (prefers-reduced-motion: reduce) {
+  #volet i { transition: none; }
+  .eyebrow-line, .kicker, #introTitle .ln > span, .lede, #introStart, .meta-line { animation: none !important; opacity: 1; transform: none; }
+}
 
 /* ---------- tampon final ---------- */
 #stamp { position: fixed; inset: 0; z-index: 9; display: grid; place-items: center; pointer-events: auto; cursor: pointer; padding-right: 456px; }
