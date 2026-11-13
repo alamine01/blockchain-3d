@@ -2,7 +2,27 @@
 
 > Exigence du sujet : au moins **2 personnes extérieures au groupe**, n'ayant pas suivi R507 et **sans explication orale préalable**. Les observations sont consignées ici et donnent lieu à des issues GitHub (#19).
 
-## 1. Protocole
+## 0. Version express (40 min en tout) — à utiliser si le temps manque
+
+Deux personnes suffisent. Un colocataire, un membre de la famille, un ami d'une autre filière : il faut seulement qu'ils n'aient **pas suivi R507**. Cela marche aussi à distance, par appel vidéo avec partage d'écran.
+
+**Message à leur envoyer**
+
+> Salut ! J'ai besoin de 20 minutes pour un projet de cours. Tu ouvres un site, tu l'utilises comme tu veux et tu dis à voix haute ce que tu comprends et ce qui te bloque. Je ne t'aiderai pas, c'est le principe : je dois voir si le site s'explique tout seul. Aucune connaissance requise, c'est même mieux si tu n'y connais rien.
+> Le lien : https://alamine01.github.io/blockchain-3d/
+
+**Déroulé minuté**
+
+| Temps | Ce que vous faites |
+|---|---|
+| 0-1 min | Les deux questions « avant » (ci-dessous). Vous notez les réponses. |
+| 1-16 min | Il parcourt seul. **Vous ne dites rien.** Vous notez dans le tableau chaque hésitation, chaque mot incompris, chaque clic sans effet. |
+| 16-19 min | Les questions « après », site fermé. |
+| 19-20 min | « Qu'est-ce qui t'a le plus aidé ? Qu'est-ce qui t'a gêné ? » |
+
+**Juste après chaque test** : créez une issue GitHub par problème relevé, même mineur (`gh issue create` ou le bouton « New issue »). C'est cette trace que le sujet demande, autant que le test lui-même.
+
+## 1. Protocole détaillé
 
 | Élément | Choix |
 |---|---|

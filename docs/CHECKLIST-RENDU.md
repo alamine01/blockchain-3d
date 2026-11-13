@@ -34,9 +34,10 @@ Le board n'est pas modifiable depuis un outil en ligne de commande : il faut pas
 
 ## C. Les trois actions humaines qui restent
 
-### 1. Tests utilisateurs — issues #9 et #19 · *le plus important*
-Exigence explicite du sujet et critère de réussite. Protocole prêt dans [`TESTS-UTILISATEURS.md`](TESTS-UTILISATEURS.md).
-- [ ] Trouver 2 personnes hors R507
+### 1. Tests utilisateurs — issues #9 et #19 · *obligatoire, et non fait à ce jour*
+Le sujet l'exige deux fois : dans le déroulé pédagogique et dans les **critères de réussite**. C'est aussi évalué dans l'UX (15 %). Sans tests, ce critère est manqué — et c'est le seul qui le soit.
+**Version express (40 min au total)** : voir la section 0 de [`TESTS-UTILISATEURS.md`](TESTS-UTILISATEURS.md), avec le message prêt à envoyer aux testeurs.
+- [ ] Trouver 2 personnes hors R507 (famille, colocataire, autre filière — un appel vidéo suffit)
 - [ ] 20 min chacune : une seule consigne, pensée à voix haute, aucune aide
 - [ ] Remplir la grille d'observation
 - [ ] Créer **une issue par problème relevé**, corriger, lier le commit à l'issue

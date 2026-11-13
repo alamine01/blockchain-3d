@@ -34,7 +34,7 @@
 | Issues granulaires, assignées, liées aux commits/PR | 25+ issues, numéros cités dans les commits, pull request finale | ✓ |
 | 8 fiches hebdomadaires | `docs/suivi/` : S01 à S08 présentes ; S02 à S05 rédigées a posteriori et signalées comme telles | *partiel — assumé et expliqué* |
 | Usage de l'IA déclaré | README, CHOIX-MODELISATION, fiches | ✓ |
-| Travail réparti entre les membres | *à compléter : qui a fait quoi* | *à compléter* |
+| Travail réparti entre les membres | Mouhamed Al Amine BAH : gestion de projet, modèle blockchain et scène Three.js, documentation. Hugo Delpuech : UX, storyboard, textes de médiation, tests utilisateurs. Répartition annoncée dans `CADRAGE.md` | ✓ |
 
 ## 4. Interaction, UX et finition (15 %)
 
