@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261113j">
+  <link rel="stylesheet" href="style.css?v=20261113e">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -46,34 +46,11 @@
   </header>
 
   <section id="intro" aria-labelledby="introTitle">
-    <canvas id="introFx" aria-hidden="true"></canvas>
-    <svg id="introThread" class="thread" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M 4 10 C 40 26, 62 8, 97 30" vector-effect="non-scaling-stroke"/>
-      <path d="M 97 30 C 92 58, 80 82, 62 97" vector-effect="non-scaling-stroke"/>
-    </svg>
-    <span class="pin pin-a" aria-hidden="true"></span>
-    <span class="pin pin-b" aria-hidden="true"></span>
-    <span class="pin pin-c" aria-hidden="true"></span>
-
     <div class="intro-inner">
-      <p class="kicker"><span class="dot" aria-hidden="true"></span>Dossier n° 2026-07 · Succession d'Émile B.</p>
-      <h2 id="introTitle" data-decode="L'AFFAIRE
-ÉMILE"><span class="sr-only">L'Affaire Émile</span><span class="placeholder" aria-hidden="true"><span class="glyph scrambling">a</span><span class="glyph scrambling">3</span><span class="glyph scrambling">f</span><span class="glyph scrambling">9</span><span class="glyph scrambling">c</span><span class="glyph scrambling">2</span><span class="glyph scrambling">e</span><span class="glyph scrambling">1</span><span class="glyph scrambling">4</span><br><span class="glyph scrambling">7</span><span class="glyph scrambling">b</span><span class="glyph scrambling">0</span><span class="glyph scrambling">d</span><span class="glyph scrambling">5</span></span></h2>
-
-      <dl class="dossier">
-        <div><dt>Défunt</dt><dd>Émile B., 82 ans</dd></div>
-        <div><dt>Parties</dt><dd>Marc · Sofia · Karim · Léa</dd></div>
-        <div><dt>Pièce</dt><dd>Registre partagé, 9 blocs</dd></div>
-        <div><dt>Litige</dt><dd class="flag">50 000 € contestés</dd></div>
-      </dl>
-
-      <p class="lede">Chacun des quatre petits-enfants détient une copie du registre. L'une d'eux affirme avoir reçu 50 000 € juste avant le décès. <strong>Une seule copie ment.</strong> Trouvez laquelle — et vous aurez compris ce qu'est une blockchain.</p>
-
-      <div class="cta">
-        <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
-        <p class="meta-line">9 chapitres · environ 15 minutes · souris ou écran tactile</p>
-      </div>
-      <p class="meta-line" id="slowNote" hidden>Le moteur 3D met du temps à arriver. Vérifiez votre connexion, ou désactivez le VPN et les bloqueurs qui filtrent <code>cdn.jsdelivr.net</code>.</p>
+      <p class="kicker">Dossier n° 2026-07 · Succession d'Émile B.</p>
+      <h2 id="introTitle">L'Affaire<br>Émile</h2>
+      <p class="lede">Émile est mort en laissant un registre de comptes que ses quatre petits-enfants ont chacun en copie. L'une d'eux prétend avoir reçu 50 000 €. Menez l'enquête : chaque indice vous apprendra comment fonctionne une <strong>blockchain</strong>, et pourquoi on ne peut pas la falsifier.</p>
+      <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
       <script>
         // Avant que le module ne soit téléchargé, on mémorise un clic pour ne pas le perdre.
         (function () {
@@ -89,9 +66,9 @@
           }, 9000);
         })();
       </script>
+      <p class="meta-line">9 étapes · environ 15 minutes · souris ou écran tactile</p>
+      <p class="meta-line" id="slowNote" hidden>Le moteur 3D met du temps à arriver. Vérifiez votre connexion, ou désactivez le VPN et les bloqueurs qui filtrent <code>cdn.jsdelivr.net</code>.</p>
     </div>
-
-    <p id="introStamp" aria-hidden="true">Affaire<br>non résolue</p>
   </section>
 
   <div id="chapter" hidden aria-hidden="true">
@@ -136,7 +113,6 @@
   </dialog>
 
   <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
-  <script type="module" src="src/intro.js?v=20261113j"></script>
-  <script type="module" src="src/main.js?v=20261113j"></script>
+  <script type="module" src="src/main.js?v=20261113e"></script>
 </body>
 </html>
