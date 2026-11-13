@@ -5,7 +5,7 @@
 | Membre | Rôle | Compte GitHub |
 |---|---|---|
 | Mouhamed Al Amine BAH | Gestion de projet, développement 3D, documentation | @alamine01 |
-| *(binôme — nom à compléter)* | UX, storyboard, tests utilisateurs | @LeCapet |
+| *Hugo delpuech* | UX, storyboard, tests utilisateurs | @LeCapet |
 
 ## 2. Public cible
 
