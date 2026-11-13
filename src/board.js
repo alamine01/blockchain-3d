@@ -1,7 +1,7 @@
 // Mur de preuves : les 4 suspects en haut, les preuves en bas, reliées à Léa par des fils rouges.
 // Une preuve s'épingle chaque fois que l'utilisateur termine l'étape correspondante.
 import * as THREE from 'three';
-import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261113e';
+import { CSS, FONT, FONT_TITLE, reduceMotion } from './engine.js?v=20261113j';
 
 const SUSPECTS = [
   { name: 'Marc', role: 'petit-fils' },

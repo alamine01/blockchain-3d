@@ -1,11 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261113e';
-import { Station } from './objects.js?v=20261113e';
-import { EvidenceBoard } from './board.js?v=20261113e';
-import { makeChain, clone, setData } from './chain.js?v=20261113e';
-import { steps, CAMERAS } from './story.js?v=20261113e';
-import { GLOSSARY, linkTerms } from './glossary.js?v=20261113e';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261113j';
+import { Station } from './objects.js?v=20261113j';
+import { EvidenceBoard } from './board.js?v=20261113j';
+import { makeChain, clone, setData } from './chain.js?v=20261113j';
+import { steps, CAMERAS } from './story.js?v=20261113j';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261113j';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
