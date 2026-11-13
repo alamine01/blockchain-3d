@@ -45,6 +45,8 @@ Expérience web interactive en 3D (Three.js) qui fait comprendre le fonctionneme
 | Support de soutenance | [`docs/soutenance/`](docs/soutenance/) · plan et questions : [`docs/SOUTENANCE.md`](docs/SOUTENANCE.md) |
 | Auto-évaluation | [`docs/MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md`](docs/MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md) |
 
+> 📋 **Avant le rendu** : [`docs/CHECKLIST-RENDU.md`](docs/CHECKLIST-RENDU.md) — ce qui est livré, ce qui reste à faire.
+
 ## Lancer le projet en local
 
 Aucune installation nécessaire (Three.js est chargé via CDN).
