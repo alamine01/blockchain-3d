@@ -10,7 +10,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" crossorigin>
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js" crossorigin>
-  <link rel="stylesheet" href="style.css?v=20261113a">
+  <script>
+    // Exécuté avant le premier affichage : décide si l'on ouvre sur l'écran-titre
+    // ou directement sur un chapitre (adresse se terminant par #etape-N),
+    // pour qu'aucun élément de l'autre état n'apparaisse pendant le chargement.
+    document.documentElement.classList.add(
+      /^#etape-[0-8]$/.test(location.hash) ? 'boot-chapitre' : 'boot-titre');
+  </script>
+  <link rel="stylesheet" href="style.css?v=20261113c">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -18,7 +25,7 @@
     } }
   </script>
 </head>
-<body class="intro-open">
+<body>
   <header class="topbar">
     <p class="brand"><span class="dot" aria-hidden="true"></span>Dossier 2026-07</p>
     <h1>L'Affaire Émile</h1>
@@ -89,6 +96,6 @@
   </dialog>
 
   <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
-  <script type="module" src="src/main.js?v=20261113a"></script>
+  <script type="module" src="src/main.js?v=20261113c"></script>
 </body>
 </html>

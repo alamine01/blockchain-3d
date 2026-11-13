@@ -1,11 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261113a';
-import { Station } from './objects.js?v=20261113a';
-import { EvidenceBoard } from './board.js?v=20261113a';
-import { makeChain, clone, setData } from './chain.js?v=20261113a';
-import { steps, CAMERAS } from './story.js?v=20261113a';
-import { GLOSSARY, linkTerms } from './glossary.js?v=20261113a';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261113c';
+import { Station } from './objects.js?v=20261113c';
+import { EvidenceBoard } from './board.js?v=20261113c';
+import { makeChain, clone, setData } from './chain.js?v=20261113c';
+import { steps, CAMERAS } from './story.js?v=20261113c';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261113c';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -206,7 +206,9 @@ async function start() {
     const k = engine.camera.aspect < 1 ? 1.9 : 1;
     if (!introOpen) engine.flyTo(pos.map((v, j) => target[j] + (v - target[j]) * k), target);
     $('panel').scrollTop = 0;
-    try { history.replaceState(null, '', `#etape-${i}`); } catch { /* ignoré */ }
+    // Au prologue, on retire le repère de l'adresse : un rechargement repart de l'écran-titre,
+    // ce qui évite de tomber au milieu de l'enquête le jour de la soutenance.
+    try { history.replaceState(null, '', i === 0 ? location.pathname : `#etape-${i}`); } catch { /* ignoré */ }
     if (fromKeyboard) $('title').focus({ preventScroll: true });
   }
 
@@ -233,12 +235,12 @@ async function start() {
   const intro = $('intro');
   let introOpen = !fromHash;
   intro.hidden = !introOpen;
-  document.body.classList.toggle('intro-open', introOpen);
+  document.documentElement.classList.toggle('boot-titre', introOpen);
   const startBtn = $('introStart');
   function openInvestigation() {
     if (!introOpen) return;
     introOpen = false;
-    document.body.classList.remove('intro-open');
+    document.documentElement.classList.remove('boot-titre');
     intro.classList.add('leaving');
     setTimeout(() => { intro.hidden = true; }, 700);
     const [pos, target] = CAMERAS.nodes;
