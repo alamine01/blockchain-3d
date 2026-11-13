@@ -1,11 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261113c';
-import { Station } from './objects.js?v=20261113c';
-import { EvidenceBoard } from './board.js?v=20261113c';
-import { makeChain, clone, setData } from './chain.js?v=20261113c';
-import { steps, CAMERAS } from './story.js?v=20261113c';
-import { GLOSSARY, linkTerms } from './glossary.js?v=20261113c';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261113e';
+import { Station } from './objects.js?v=20261113e';
+import { EvidenceBoard } from './board.js?v=20261113e';
+import { makeChain, clone, setData } from './chain.js?v=20261113e';
+import { steps, CAMERAS } from './story.js?v=20261113e';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261113e';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -255,6 +255,7 @@ async function start() {
   go(fromHash ? +fromHash[1] : 0);
   // La scène est prête : le bouton redevient actif, et un clic passé pendant le chargement est honoré.
   window.__ready = true;
+  document.getElementById('slowNote').hidden = true;
   startBtn.classList.remove('loading');
   startBtn.textContent = 'Ouvrir l’enquête';
   document.body.classList.add('ready');

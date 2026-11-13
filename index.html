@@ -8,21 +8,34 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css?v=20261113e">
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+  <!-- Tout le moteur 3D est annoncé ici : sans cela le navigateur découvre ces fichiers
+       les uns après les autres (3 niveaux de dépendances) et le chargement traîne. -->
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" crossorigin>
   <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/RenderPass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/OutputPass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/Pass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/ShaderPass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/MaskPass.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/CopyShader.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/LuminosityHighPassShader.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/shaders/OutputShader.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/environments/RoomEnvironment.js" crossorigin>
   <script>
     // Exécuté avant le premier affichage : décide si l'on ouvre sur l'écran-titre
     // ou directement sur un chapitre (adresse se terminant par #etape-N),
     // pour qu'aucun élément de l'autre état n'apparaisse pendant le chargement.
     document.documentElement.classList.add(
       /^#etape-[0-8]$/.test(location.hash) ? 'boot-chapitre' : 'boot-titre');
-  </script>
-  <link rel="stylesheet" href="style.css?v=20261113c">
-  <script type="importmap">
-    { "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-    } }
   </script>
 </head>
 <body>
@@ -48,9 +61,13 @@
             b.classList.add('loading');
             b.textContent = 'Préparation du dossier…';
           });
+          setTimeout(function () {
+            if (!window.__ready) document.getElementById('slowNote').hidden = false;
+          }, 9000);
         })();
       </script>
       <p class="meta-line">9 étapes · environ 15 minutes · souris ou écran tactile</p>
+      <p class="meta-line" id="slowNote" hidden>Le moteur 3D met du temps à arriver. Vérifiez votre connexion, ou désactivez le VPN et les bloqueurs qui filtrent <code>cdn.jsdelivr.net</code>.</p>
     </div>
   </section>
 
@@ -96,6 +113,6 @@
   </dialog>
 
   <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
-  <script type="module" src="src/main.js?v=20261113c"></script>
+  <script type="module" src="src/main.js?v=20261113e"></script>
 </body>
 </html>

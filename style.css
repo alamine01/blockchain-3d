@@ -324,3 +324,6 @@ button.big.loading::before {
   border: 2px solid rgba(240,181,74,.3); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+#slowNote { max-width: 46ch; color: var(--accent); }
+#slowNote code { font-size: .95em; }
+#slowNote[hidden] { display: none; }
