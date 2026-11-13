@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261112a">
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" crossorigin>
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js" crossorigin>
+  <link rel="stylesheet" href="style.css?v=20261113a">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -16,7 +18,7 @@
     } }
   </script>
 </head>
-<body>
+<body class="intro-open">
   <header class="topbar">
     <p class="brand"><span class="dot" aria-hidden="true"></span>Dossier 2026-07</p>
     <h1>L'Affaire Émile</h1>
@@ -29,6 +31,18 @@
       <h2 id="introTitle">L'Affaire<br>Émile</h2>
       <p class="lede">Émile est mort en laissant un registre de comptes que ses quatre petits-enfants ont chacun en copie. L'une d'eux prétend avoir reçu 50 000 €. Menez l'enquête : chaque indice vous apprendra comment fonctionne une <strong>blockchain</strong>, et pourquoi on ne peut pas la falsifier.</p>
       <button type="button" id="introStart" class="primary big">Ouvrir l'enquête</button>
+      <script>
+        // Avant que le module ne soit téléchargé, on mémorise un clic pour ne pas le perdre.
+        (function () {
+          var b = document.getElementById('introStart');
+          b.addEventListener('click', function () {
+            if (window.__ready) return;
+            window.__pendingStart = true;
+            b.classList.add('loading');
+            b.textContent = 'Préparation du dossier…';
+          });
+        })();
+      </script>
       <p class="meta-line">9 étapes · environ 15 minutes · souris ou écran tactile</p>
     </div>
   </section>
@@ -75,6 +89,6 @@
   </dialog>
 
   <noscript>Ce site a besoin de JavaScript et de WebGL.</noscript>
-  <script type="module" src="src/main.js?v=20261112a"></script>
+  <script type="module" src="src/main.js?v=20261113a"></script>
 </body>
 </html>

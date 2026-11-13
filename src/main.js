@@ -1,11 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261112a';
-import { Station } from './objects.js?v=20261112a';
-import { EvidenceBoard } from './board.js?v=20261112a';
-import { makeChain, clone, setData } from './chain.js?v=20261112a';
-import { steps, CAMERAS } from './story.js?v=20261112a';
-import { GLOSSARY, linkTerms } from './glossary.js?v=20261112a';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261113a';
+import { Station } from './objects.js?v=20261113a';
+import { EvidenceBoard } from './board.js?v=20261113a';
+import { makeChain, clone, setData } from './chain.js?v=20261113a';
+import { steps, CAMERAS } from './story.js?v=20261113a';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261113a';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -21,7 +21,7 @@ const DATAS = [
 ];
 
 async function start() {
-  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]); } catch { /* polices facultatives */ }
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 800))]); } catch { /* polices facultatives */ }
 
   const engine = createEngine(document.getElementById('stage'));
   const honest = makeChain(DATAS);
@@ -234,7 +234,9 @@ async function start() {
   let introOpen = !fromHash;
   intro.hidden = !introOpen;
   document.body.classList.toggle('intro-open', introOpen);
-  $('introStart').addEventListener('click', () => {
+  const startBtn = $('introStart');
+  function openInvestigation() {
+    if (!introOpen) return;
     introOpen = false;
     document.body.classList.remove('intro-open');
     intro.classList.add('leaving');
@@ -244,11 +246,17 @@ async function start() {
     engine.flyTo(pos.map((v, j) => target[j] + (v - target[j]) * k), target, 3200);
     setTimeout(() => chapterCard(current), 600);
     $('title').focus({ preventScroll: true });
-  });
+  }
+  startBtn.addEventListener('click', openInvestigation);
   if (introOpen) { const idle = engine.onFrame((dt, now) => { if (!introOpen) { idle(); return; } engine.camera.position.set(Math.sin(now / 9000) * 22, 24, -30 + Math.cos(now / 9000) * 22); }); }
   // Ouverture : la caméra descend du ciel vers le réseau familial.
   go(fromHash ? +fromHash[1] : 0);
+  // La scène est prête : le bouton redevient actif, et un clic passé pendant le chargement est honoré.
+  window.__ready = true;
+  startBtn.classList.remove('loading');
+  startBtn.textContent = 'Ouvrir l’enquête';
   document.body.classList.add('ready');
+  if (window.__pendingStart && introOpen) openInvestigation();
   // Pour les tests automatisés.
   window.__app = { go, get current() { return current; }, missions: doneMissions };
 }

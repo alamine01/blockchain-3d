@@ -313,3 +313,13 @@ code.hash.decoding { color: var(--accent); }
   .cast { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .out:has(.recap) { max-height: none; overflow: visible; }
+
+/* ---------- chargement de l'écran-titre ---------- */
+/* Le panneau et la barre du haut sont masqués dès le premier affichage (classe posée dans le HTML),
+   ce qui évite de les voir apparaître derrière l'écran-titre pendant le téléchargement du module 3D. */
+button.big.loading, button.big.loading:hover { background: rgba(240,181,74,.10); color: var(--accent); border: 1px solid rgba(240,181,74,.5); box-shadow: none; cursor: progress; }
+button.big.loading::before {
+  content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 10px; vertical-align: -2px;
+  border: 2px solid rgba(240,181,74,.3); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
