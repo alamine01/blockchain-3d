@@ -2,7 +2,7 @@
 
 > **Brouillon** organisé selon l'évaluation indicative du sujet (section 7). À recopier dans le **modèle officiel** `MMI-R507-projet-blockchain-GRILLE-AUTOEVAL.md` fourni sur Moodle avant la soutenance, et à compléter avec les résultats des tests.
 
-**Groupe** : Mouhamed Al Amine BAH (@alamine01), *binôme (@LeCapet) — nom à compléter*
+**Groupe** : Mouhamed Al Amine BAH (@alamine01), Hugo Delpuech (@LeCapet)
 **Démo** : https://alamine01.github.io/blockchain-3d/
 
 ## 1. Pertinence pédagogique (25 %)

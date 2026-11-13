@@ -12,7 +12,7 @@ Expérience web interactive en 3D (Three.js) qui fait comprendre le fonctionneme
 | Membre | Rôle principal |
 |---|---|
 | Mouhamed Al Amine BAH ([@alamine01](https://github.com/alamine01)) | Gestion de projet, développement 3D, documentation |
-| *(nom à compléter)* ([@LeCapet](https://github.com/LeCapet)) | UX, storyboard, tests utilisateurs |
+| Hugo Delpuech ([@LeCapet](https://github.com/LeCapet)) | UX, storyboard, tests utilisateurs |
 
 ## Liens
 

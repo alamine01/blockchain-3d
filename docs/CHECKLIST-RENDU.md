@@ -47,7 +47,7 @@ Exigence explicite du sujet et critère de réussite. Protocole prêt dans [`TES
 - [ ] Reporter les valeurs dans `TESTS-UTILISATEURS.md` et dans la grille d'auto-évaluation
 
 ### 3. Binôme et répartition
-- [ ] Remplacer les mentions *« nom à compléter »* dans `README.md`, `docs/CADRAGE.md` et les fiches de suivi
+- [x] Nom du binôme (Hugo Delpuech) renseigné dans le README, le cadrage, les fiches et la grille
 - [ ] Renseigner « Travail réparti entre les membres » dans la grille d'auto-évaluation
 - [ ] Vérifier qu'il est bien collaborateur du dépôt et qu'il a des issues assignées
 

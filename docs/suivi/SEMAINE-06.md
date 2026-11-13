@@ -1,7 +1,7 @@
 # Suivi hebdomadaire — Semaine 06
 
 **Période** : du 09/11/2026 au 13/11/2026
-**Membres** : Mouhamed Al Amine BAH (@alamine01), binôme (@LeCapet) — *nom à compléter*
+**Membres** : Mouhamed Al Amine BAH (@alamine01), Hugo Delpuech (@LeCapet)
 **Démo en ligne** : https://alamine01.github.io/blockchain-3d/
 **Dépôt** : https://github.com/alamine01/blockchain-3d
 **GitHub Project** : https://github.com/alamine01/blockchain-3d/projects
@@ -53,4 +53,4 @@
 | Membre | Heures |
 |---|---|
 | Mouhamed Al Amine BAH | *à compléter* |
-| Binôme (@LeCapet) | *à compléter* |
+| Hugo Delpuech | *à compléter* |
