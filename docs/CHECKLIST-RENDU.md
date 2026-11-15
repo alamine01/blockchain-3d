@@ -20,27 +20,28 @@
 Le board n'est pas modifiable depuis un outil en ligne de commande : il faut passer par l'interface. Il compte pour **20 % de la note**, donc c'est la tâche la plus rentable de la liste.
 
 1. **Vérifier les 5 colonnes**, nommées exactement : `Backlog`, `À faire`, `En cours`, `À vérifier`, `Terminé`.
-2. **Ajouter les issues manquantes** : dans une colonne, `+ Add item` → taper `#26`, puis `#27`, `#28`, `#29`, `#30`, `#32`, `#33`.
+2. **Ajouter les issues manquantes** : dans une colonne, `+ Add item` → taper `#26`, puis `#27`, `#28`, `#29`, `#30`, `#32`, `#33`, `#48`, `#49`.
 3. **Ranger les cartes** :
 
 | Colonne | Issues |
 |---|---|
-| **Terminé** | 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 21, 26, 27, 28, 29, 30, 32, 33 |
+| **Terminé** | 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 21, 26, 27, 28, 29, 30, 32, 33, 48, 49 |
 | **À vérifier** | 22 (CHOIX-MODELISATION, en attente du modèle officiel) |
-| **En cours** | 9 (recruter les testeurs), 19 (tests utilisateurs), 20 (mesure des FPS) |
+| **En cours** | 20 (mesure des FPS) |
 | **À faire** | 23 (vérification finale), 24 (auto-évaluation), 25 (préparer la soutenance) |
+
+> Les issues 9 (recruter les testeurs) et 19 (tests utilisateurs) passent en **Terminé** : les tests ont eu lieu le 15/11 et ont donné les issues #48 et #49.
 
 4. **Vérifier que le board est public** (⋯ → Settings → Visibility), sinon le correcteur ne le verra pas.
 
 ## C. Les trois actions humaines qui restent
 
-### 1. Tests utilisateurs — issues #9 et #19 · *obligatoire, et non fait à ce jour*
-Le sujet l'exige deux fois : dans le déroulé pédagogique et dans les **critères de réussite**. C'est aussi évalué dans l'UX (15 %). Sans tests, ce critère est manqué — et c'est le seul qui le soit.
-**Version express (40 min au total)** : voir la section 0 de [`TESTS-UTILISATEURS.md`](TESTS-UTILISATEURS.md), avec le message prêt à envoyer aux testeurs.
-- [ ] Trouver 2 personnes hors R507 (famille, colocataire, autre filière — un appel vidéo suffit)
-- [ ] 20 min chacune : une seule consigne, pensée à voix haute, aucune aide
-- [ ] Remplir la grille d'observation
-- [ ] Créer **une issue par problème relevé**, corriger, lier le commit à l'issue
+### 1. Tests utilisateurs — issues #9 et #19 · *faits le 15/11*
+- [x] 2 personnes hors R507 ont parcouru le site sans explication orale
+- [x] Observations consignées dans [`TESTS-UTILISATEURS.md`](TESTS-UTILISATEURS.md) §4
+- [x] Une issue par problème relevé : #48 (trop de texte) et #49 (pas assez intuitif)
+- [x] Corrections livrées et liées aux issues (commit `b643356`)
+- [ ] Compléter les fiches 2 et 3 : prénom/profil/date des testeurs, FPS relevés, réponses au questionnaire de fin
 
 ### 2. Mesure des FPS — issue #20
 - [ ] Ouvrir le site sur un poste de salle de TP

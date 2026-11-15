@@ -12,7 +12,7 @@
 | Les 7 notions sont présentes | Une étape par notion (étapes 1 à 7), nommée à l'identique du sujet | ✓ |
 | Chaque notion produit une animation ou une interaction observable | Mission obligatoire à chaque étape (ouvrir un bloc, modifier des données, scanner, comparer, miner, PoW/PoS, rejouer une transaction et une double dépense) | ✓ |
 | Fil rouge narratif qui relie les notions | « L'Affaire Émile » : chaque notion est un indice ; preuves épinglées sur le mur ; récapitulatif final des 7 notions | ✓ |
-| Compréhensible par un non-initié sans explication | Mots techniques cliquables, missions, « À retenir », glossaire. *Résultat des tests : à compléter* | *à confirmer par les tests* |
+| Compréhensible par un non-initié sans explication | Mots techniques cliquables, missions, « À retenir », glossaire. Les 2 testeurs ont terminé l'enquête seuls et désigné le bon coupable : « pas d'erreur de texte, c'est bien expliqué » | ✓ |
 | Attaque illustrée + détection | Falsification du bloc 7 (étapes 3-4) et double dépense (étape 7), toutes deux détectées par le réseau | ✓ |
 
 ## 2. Argumentation des choix (25 %)
@@ -42,7 +42,7 @@
 |---|---|---|
 | Légendes, boutons, textes lisibles, feedback, navigation | Missions cochées, bouton Suivant qui s'illumine, notifications « Indice obtenu », barre de progression, navigation clavier | ✓ |
 | ≥ 30 FPS sur poste de TP | Compteur affiché, qualité adaptative. *Mesure : à compléter* | *à mesurer* |
-| Tests avec ≥ 2 personnes extérieures, issues créées | `docs/TESTS-UTILISATEURS.md`. *À compléter* | *à faire* |
+| Tests avec ≥ 2 personnes extérieures, issues créées | 2 testeurs le 15/11, synthèse dans `docs/TESTS-UTILISATEURS.md` §4, issues #48 et #49 créées et corrigées le jour même | ✓ |
 | Déploiement en ligne | GitHub Pages | ✓ |
 | Accessibilité | Couleurs doublées de texte, clavier, `aria-live`, mouvement réduit, mobile | ✓ |
 
