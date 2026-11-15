@@ -48,34 +48,38 @@ Deux personnes suffisent. Un colocataire, un membre de la famille, un ami d'une 
 
 **Critère de réussite retenu** : au moins 5 bonnes réponses sur les questions 2 à 6 à eux deux (sur 10), et aucun blocage qui empêche de finir l'enquête.
 
-## 2. Fiche d'observation — Testeur 1
+## 2. Fiches d'observation
 
-| Champ | Réponse |
-|---|---|
-| Prénom (ou initiales), profil | |
-| Date, poste utilisé | |
-| Niveau avant / après (1-5) | / |
-| FPS observés (étapes 0 / 3 / 5 / 8) | / / / |
-| Temps total | |
-| A trouvé le coupable ? | |
+Les tests ont été conduits par Hugo Delpuech le 15/11/2026, auprès de deux
+personnes extérieures à la formation, sans aucune explication orale.
 
-| Étape | Observation (hésitation, incompréhension, réaction) | Gravité (bloquant / gênant / mineur) | Issue créée |
-|---|---|---|---|
-| 0 Le dossier | | | |
-| 1 La pièce à conviction | | | |
-| 2 Le labo des empreintes | | | |
-| 3 La scène du crime | | | |
-| 4 Les témoins | | | |
-| 5 L'alibi de Léa | | | |
-| 6 Le procès | | | |
-| 7 La reconstitution | | | |
-| 8 Le verdict | | | |
+| Champ | Testeur 1 | Testeur 2 |
+|---|---|---|
+| Prénom, profil | Benoit Delpuech — proche du binôme, extérieur à la formation MMI | Stéphanie Delpuech — proche du binôme, extérieure à la formation MMI |
+| Date | 15/11/2026 | 15/11/2026 |
+| Connaissance de la blockchain avant | Aucune | Aucune |
+| A terminé l'enquête seul ? | Oui | Oui |
+| A trouvé le coupable ? | Oui | Oui |
+| FPS observés | non relevés | non relevés |
 
-Réponses au questionnaire après : …
+**Verbatims recueillis**
 
-## 3. Fiche d'observation — Testeur 2
+| Testeur | Ce qui est dit | Ce que ça a produit |
+|---|---|---|
+| Les deux | « Trop de texte sur la droite, pas assez intuitif. » | Issues [#48](https://github.com/alamine01/blockchain-3d/issues/48) et [#49](https://github.com/alamine01/blockchain-3d/issues/49) |
+| Les deux | « Pas d'erreur de texte, c'est bien expliqué, c'est la forme du texte qui dérange. » | Aucune correction de fond nécessaire : le contenu est validé |
+| Testeur 1 | « Très lourd. » (à propos du volume de texte par étape) | Plafonds de longueur retenus dans la relecture [#37](https://github.com/alamine01/blockchain-3d/issues/37) |
+| Testeur 1 | A bâillé pendant la lecture d'une étape. | Même suite |
+| Testeuse 2 | Ne faisait pas le lien entre « opération », « transaction » et le fait qu'il s'agit d'un paiement. | Uniformisation du vocabulaire proposée dans la relecture [#37](https://github.com/alamine01/blockchain-3d/issues/37) |
 
-*(même tableau que le testeur 1)*
+> **Limite assumée de ce protocole.** La grille d'observation étape par étape
+> (section 1) n'a pas été remplie pendant la séance : seules les remarques
+> formulées spontanément par les testeurs ont été notées, puis reprises dans la
+> relecture et dans les issues. Les deux testeurs sont par ailleurs des proches
+> du binôme — extérieurs à la formation, donc non initiés, mais pas
+> indépendants. Les relevés de FPS n'ont pas été faits à cette occasion ; ils
+> restent à faire sur un poste de salle de TP (issue
+> [#20](https://github.com/alamine01/blockchain-3d/issues/20)).
 
 ## 4. Synthèse et corrections
 
