@@ -17,20 +17,22 @@
 
 ## B. GitHub Project — à faire à la main (≈ 10 min)
 
-Le board n'est pas modifiable depuis un outil en ligne de commande : il faut passer par l'interface. Il compte pour **20 % de la note**, donc c'est la tâche la plus rentable de la liste.
+Le board n'est pas modifiable en ligne de commande : il faut passer par l'interface.
+Il compte pour **20 % de la note**, c'est la tâche la plus rentable de la liste.
 
 1. **Vérifier les 5 colonnes**, nommées exactement : `Backlog`, `À faire`, `En cours`, `À vérifier`, `Terminé`.
-2. **Ajouter les issues manquantes** : dans une colonne, `+ Add item` → taper `#26`, puis `#27`, `#28`, `#29`, `#30`, `#32`, `#33`, `#48`, `#49`.
-3. **Ranger les cartes** :
+2. **Ajouter les cartes manquantes** : dans une colonne, `+ Add item` → taper le numéro.
+3. **Ranger les cartes** ainsi :
 
 | Colonne | Issues |
 |---|---|
-| **Terminé** | 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 21, 26, 27, 28, 29, 30, 32, 33, 48, 49 |
+| **Terminé** | 1 à 19, 21, 26 à 30, 32 à 36, 39, 48, 49 |
 | **À vérifier** | 22 (CHOIX-MODELISATION, en attente du modèle officiel) |
-| **En cours** | 20 (mesure des FPS) |
-| **À faire** | 23 (vérification finale), 24 (auto-évaluation), 25 (préparer la soutenance) |
+| **En cours** | 20 (mesure des FPS), 24 (auto-évaluation, ligne soutenance ouverte), 37 (relecture UX — Hugo) |
+| **À faire** | 23 (vérification finale), 25 (préparer la soutenance), 38 (organiser le board — Hugo) |
 
-> Les issues 9 (recruter les testeurs) et 19 (tests utilisateurs) passent en **Terminé** : les tests ont eu lieu le 15/11 et ont donné les issues #48 et #49.
+> Huit issues en double créées le 13/11 (#40 à #47) ont été fermées comme doublons
+> le 15/11 : si elles figurent encore sur le board, les retirer.
 
 4. **Vérifier que le board est public** (⋯ → Settings → Visibility), sinon le correcteur ne le verra pas.
 
