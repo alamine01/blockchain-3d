@@ -239,7 +239,7 @@ export const steps = [
   // ---------------------------------------------------------------- 3
   {
     id: 'crime', title: 'La scène du crime', tag: 'Notion 3 · Immutabilité et falsification', area: 'registre',
-    missions: [['find', 'Trouver le bloc falsifié et l’ouvrir'], ['restore', 'Remettre la version d’origine : la chaîne redevient-elle verte ?']],
+    missions: [['find', 'Trouver le bloc falsifié et l’ouvrir'], ['restore', 'Remettre la version d’origine : la chaîne redevient-elle valide (✓) ?']],
     story: `<p>Voici maintenant la copie de <strong>Léa</strong>, celle qui « prouve » les 50 000 jetons. Le scanner de l'enquêteur la vérifie bloc par bloc. Où la chaîne se casse-t-elle, et pourquoi ?</p>
       <p>Ensuite, essayez vous-même : modifiez un bloc, puis remettez la version d'origine.</p>`,
     retenir: `Modifier un ancien bloc change son empreinte. Le bloc suivant ne le reconnaît plus, et <strong>tous les blocs après lui deviennent invalides</strong>, comme des dominos. La falsification se voit tout de suite.`,
@@ -704,7 +704,7 @@ export const steps = [
         <div id="out" class="out" aria-live="polite"></div>
         <hr>
         <h3>La double dépense</h3>
-        <p>Léa possède 440 jetons (500 reçus d'Émile, 60 donnés à Sofia). Elle envoie <strong>les mêmes 440 jetons</strong> à Marc <em>et</em> à Karim, en même temps.</p>
+        <p>Léa possède 440 jetons (500 reçus d'Émile, 60 donnés à Sofia). Elle envoie <strong>les mêmes 440 jetons deux fois</strong>, au même moment : une opération vers Marc et Sofia, une autre vers Karim.</p>
         <button type="button" id="attack" disabled>Rejouer la double dépense</button>
         <div id="out2" class="out" aria-live="polite"></div>`);
       const $ = (s) => root.querySelector(s);
@@ -808,7 +808,7 @@ export const steps = [
     missions: [['accuse', 'Désigner le coupable']],
     story: `<p>Vous avez toutes les preuves. Qui a falsifié le registre d'Émile ?</p>
       <p>Cliquez sur l'ordinateur du coupable, ou choisissez son nom.</p>`,
-    retenir: `Une blockchain ne se modifie jamais : <strong>on la complète</strong>. Grâce aux empreintes, aux copies partagées et au consensus, <strong>personne ne peut tricher seul</strong>, sans avoir besoin de faire confiance à un banquier ou à un notaire.`,
+    retenir: `Une blockchain ne se réécrit pas : <strong>on lui ajoute des blocs</strong>. Grâce aux empreintes, aux copies partagées et au consensus, <strong>personne ne peut tricher seul sans que ça se voie</strong>, et sans avoir besoin de faire confiance à un banquier ou à un notaire.`,
     enter(ctx) {
       setupStations(ctx);
       ctx.board.markGuilty(false);
