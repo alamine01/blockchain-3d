@@ -164,12 +164,69 @@ export function createEngine(container) {
     down = null;
     if (moved > 6) return;
     const o = pick(e);
-    if (o) clickables.get(o)();
+    if (o) { const fn = clickables.get(o); retireHint(o); fn(); }
   });
   renderer.domElement.addEventListener('pointermove', (e) => {
     if (e.pointerType === 'mouse' && !down) renderer.domElement.style.cursor = pick(e) ? 'pointer' : '';
   });
-  const addClickable = (obj, fn) => { clickables.set(obj, fn); return () => clickables.delete(obj); };
+  // Repère « cliquez-moi » au-dessus de chaque objet interactif.
+  // Les testeurs ne devinaient pas que la scène 3D était cliquable : sans ce
+  // repère, l'objet ne se signale qu'au survol de la souris, donc jamais au
+  // tactile et jamais pour quelqu'un qui ne promène pas son curseur.
+  const hintTex = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const g = c.getContext('2d');
+    g.strokeStyle = '#f0b54a';
+    g.lineWidth = 9;
+    g.beginPath(); g.arc(64, 64, 44, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = '#f0b54a';
+    g.beginPath(); g.arc(64, 64, 15, 0, Math.PI * 2); g.fill();
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  })();
+  const hints = new Map();
+  const boxTmp = new THREE.Box3();
+  const posTmp = new THREE.Vector3();
+  const addClickable = (obj, fn) => {
+    clickables.set(obj, fn);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: hintTex, transparent: true, depthTest: false, opacity: 0.85 }));
+    sprite.renderOrder = 998;
+    sprite.scale.setScalar(0.55);
+    scene.add(sprite);
+    // La hauteur du repère est mesurée à la première image où l'objet est
+    // visible : à l'inscription, il n'est pas toujours encore placé dans la scène.
+    hints.set(obj, { sprite, haut: 0.75, mesure: -1e9 });
+    return () => { clickables.delete(obj); retireHint(obj); };
+  };
+  function retireHint(obj) {
+    const h = hints.get(obj);
+    if (!h) return;
+    scene.remove(h.sprite);
+    h.sprite.material.dispose();
+    hints.delete(obj);
+  }
+  function majHints(now) {
+    const battement = reduceMotion ? 1 : 0.86 + Math.sin(now / 420) * 0.14;
+    for (const [obj, h] of hints) {
+      const vu = isShown(obj) && clickables.has(obj);
+      h.sprite.visible = vu;
+      if (!vu) continue;
+      obj.getWorldPosition(posTmp);
+      // Remesuré deux fois par seconde : un objet peut arriver dans la scène
+      // à l'échelle 0 puis grandir, une mesure unique serait fausse.
+      if (now - (h.mesure || -1e9) > 500) {
+        h.mesure = now;
+        boxTmp.setFromObject(obj);
+        const d = boxTmp.max.y - posTmp.y;
+        h.haut = Number.isFinite(d) && d > 0 ? d + 0.45 : 0.75;
+      }
+      h.sprite.position.set(posTmp.x, posTmp.y + h.haut, posTmp.z);
+      h.sprite.scale.setScalar(0.55 * battement);
+      h.sprite.material.opacity = 0.55 + (battement - 0.86) * 1.6;
+    }
+  }
 
   const fpsEl = document.getElementById('fps');
   let frames = 0, slow = 0, lastFps = performance.now(), prev = performance.now();
@@ -183,6 +240,7 @@ export function createEngine(container) {
       if (k >= 1) { tweens.delete(tw); tw.resolve(); }
     }
     for (const fn of frameCallbacks) fn(dt, now);
+    majHints(now);
     if (!reduceMotion) {
       dust.rotation.y += dt * 0.00002;
       dust.position.y = Math.sin(now / 4000) * 0.3;

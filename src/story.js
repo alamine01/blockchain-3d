@@ -1,8 +1,8 @@
 // Les 9 étapes de « L'Affaire Émile ». Chaque étape = une notion + une interaction.
 import * as THREE from 'three';
-import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261113e';
-import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261113e';
-import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261113e';
+import { C, CSS, FONT_TITLE, makeSprite } from './engine.js?v=20261115a';
+import { BlockMesh, ChainView, sendPacket, sparks } from './objects.js?v=20261115a';
+import { DIFFICULTY, prefix, computeHash, mineSync, nextBlock, setData, clone, describe } from './chain.js?v=20261115a';
 
 export const AREAS = {
   nodes: new THREE.Vector3(0, 0, -30),
@@ -290,7 +290,10 @@ export const steps = [
       function update(cascade) {
         const st = view.refresh({ cascade });
         const first = st.findIndex((s) => !s.valid);
+        // Le balayage du scanner peut se poursuivre après un changement de chapitre :
+        // le panneau a alors été remplacé et il n'y a plus rien à mettre à jour.
         const banner = root.querySelector('#banner');
+        if (!banner || !ctx.alive()) return st;
         banner.className = `banner ${first < 0 ? 'ok' : 'bad'}`;
         const scanning = view.revealed !== Infinity;
         banner.textContent = scanning

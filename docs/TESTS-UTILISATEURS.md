@@ -79,9 +79,39 @@ Réponses au questionnaire après : …
 
 ## 4. Synthèse et corrections
 
+Deux personnes extérieures à la promotion R507 ont parcouru le site le
+**15/11/2026**, sans aucune explication orale, puis ont répondu aux questions.
+
+**Ce qui a fonctionné.** Les deux ont parcouru l'enquête jusqu'au bout et ont
+désigné le bon coupable. Aucune erreur de contenu relevée : *« pas d'erreur de
+texte, c'est bien expliqué »*. Les notions sont donc passées — c'est l'objectif
+pédagogique du projet, et il est atteint.
+
+**Ce qui a bloqué.** La critique est unanime et porte uniquement sur la forme :
+*« trop de texte sur la droite, pas assez intuitif […] c'est la forme du texte
+qui dérange »*.
+
 | Problème observé | Testeurs concernés | Correction apportée | Issue / commit |
 |---|---|---|---|
-| | | | |
+| Trop de texte affiché d'un coup dans le panneau de droite (~450 caractères avant d'avoir rien fait) | Les 2 | Divulgation progressive : accroche courte → mission mise en avant → commandes → contexte replié dans un `<details>` → « À retenir » masqué jusqu'à ce que les missions soient faites | [#48](https://github.com/alamine01/blockchain-3d/issues/48) |
+| Parcours pas assez intuitif : rien n'indique que les objets de la scène 3D sont cliquables (le curseur ne change qu'au survol, donc jamais au tactile) | Les 2 | Pastille ambrée posée automatiquement au-dessus de chaque objet interactif, qui s'efface après le premier clic | [#49](https://github.com/alamine01/blockchain-3d/issues/49) |
+| Les trois missions d'une étape sont présentées à égalité : on ne sait pas par où commencer | Les 2 | Seule la première mission non faite est mise en avant (blanc, gras, case ambrée) ; les suivantes passent en retrait | [#49](https://github.com/alamine01/blockchain-3d/issues/49) |
+| Le texte qui défile passe derrière la barre « Précédent / Suivant » et reste lisible par transparence | Testeur 2 | Fond de la barre rendu opaque | [#49](https://github.com/alamine01/blockchain-3d/issues/49) |
+
+**Mesure avant / après.** Texte affiché à l'arrivée sur une étape, avant toute
+action de l'utilisateur :
+
+| Étape | Avant | Après |
+|---|---|---|
+| 1 La pièce à conviction | ~430 caractères | 142 |
+| 3 La scène du crime | ~470 caractères | 169 |
+| 5 L'alibi de Léa | ~520 caractères | 217 |
+| 6 Le procès | ~450 caractères | 198 |
+
+> **À compléter par l'équipe** : prénom ou initiales, profil et date de chaque
+> testeur dans les fiches 2 et 3 ci-dessus, ainsi que les FPS relevés et les
+> réponses au questionnaire de fin. Ces informations ne figurent pas encore dans
+> ce document faute d'avoir été notées pendant la séance.
 
 ## 5. Vérifications déjà faites par l'équipe (avant tests)
 

@@ -1,11 +1,11 @@
 // Point d'entrée : construit le monde 3D, puis gère la navigation entre les étapes.
 import * as THREE from 'three';
-import { createEngine, disposeTree, CSS } from './engine.js?v=20261113e';
-import { Station } from './objects.js?v=20261113e';
-import { EvidenceBoard } from './board.js?v=20261113e';
-import { makeChain, clone, setData } from './chain.js?v=20261113e';
-import { steps, CAMERAS } from './story.js?v=20261113e';
-import { GLOSSARY, linkTerms } from './glossary.js?v=20261113e';
+import { createEngine, disposeTree, CSS } from './engine.js?v=20261115a';
+import { Station } from './objects.js?v=20261115a';
+import { EvidenceBoard } from './board.js?v=20261115a';
+import { makeChain, clone, setData } from './chain.js?v=20261115a';
+import { steps, CAMERAS } from './story.js?v=20261115a';
+import { GLOSSARY, linkTerms } from './glossary.js?v=20261115a';
 
 // Le registre d'Émile : 9 blocs. Le bloc 7 contient le vrai paiement de 500 jetons.
 const DATAS = [
@@ -94,11 +94,16 @@ async function start() {
     const box = $('missions');
     box.hidden = list.length === 0;
     const done = doneMissions.get(s.id);
-    box.querySelector('ul').innerHTML = list.map(([id, text]) =>
-      `<li class="${done.has(id) ? 'done' : ''}"><span class="check" aria-hidden="true"></span><span>${text}</span><span class="sr-only">${done.has(id) ? ' (fait)' : ' (à faire)'}</span></li>`).join('');
+    // Une seule action est mise en avant à la fois : la première non faite.
+    // Les testeurs se perdaient devant trois consignes présentées à égalité.
+    const encours = list.findIndex(([id]) => !done.has(id));
+    box.querySelector('ul').innerHTML = list.map(([id, text], i) =>
+      `<li class="${done.has(id) ? 'done' : i === encours ? 'encours' : ''}"><span class="check" aria-hidden="true"></span><span>${text}</span><span class="sr-only">${done.has(id) ? ' (fait)' : i === encours ? ' (à faire maintenant)' : ' (à faire)'}</span></li>`).join('');
     const all = list.length === 0 || list.every(([id]) => done.has(id));
     $('next').classList.toggle('ready', all && current < steps.length - 1);
     box.classList.toggle('complete', all && list.length > 0);
+    // « À retenir » n'apparaît qu'une fois la mission accomplie : c'est la récompense, pas un préambule.
+    $('retenirBox').hidden = !all;
   }
   function completeMission(stepId, id) {
     const set = doneMissions.get(stepId);
@@ -187,8 +192,18 @@ async function start() {
     $('count').textContent = `Étape ${i} / ${steps.length - 1}`;
     document.querySelector('#progress span').style.width = `${(i / (steps.length - 1)) * 100}%`;
     $('title').textContent = s.title;
-    $('story').innerHTML = s.story;
+    // Le premier paragraphe sert d'accroche ; le reste va dans « Le contexte », replié.
+    const tmp = document.createElement('div');
+    tmp.innerHTML = s.story;
+    const paras = [...tmp.children];
+    $('hook').innerHTML = paras.length ? paras[0].innerHTML : s.story;
+    const reste = paras.slice(1);
+    $('story').innerHTML = reste.map((n) => n.outerHTML).join('');
+    const boite = $('contextBox');
+    boite.hidden = reste.length === 0;
+    boite.open = false;
     $('retenir').innerHTML = s.retenir;
+    linkTerms($('hook'));
     linkTerms($('story'));
     pop.hidden = true;
     $('prev').disabled = i === 0;
