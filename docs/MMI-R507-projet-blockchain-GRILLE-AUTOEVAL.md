@@ -1,6 +1,6 @@
 # Grille d'auto-évaluation — L'Affaire Émile
 
-> Organisée selon l'évaluation indicative du sujet (section 7). Les lignes marquées *à compléter* le seront après les tests utilisateurs et la répétition du 19 novembre.
+> Organisée selon l'évaluation indicative du sujet (section 7). Les tests utilisateurs ont eu lieu le 15/11 ; les lignes encore marquées *à compléter* dépendent de la répétition du 19 novembre et d'une mesure sur poste de TP.
 
 **Groupe** : Mouhamed Al Amine BAH (@alamine01), Hugo Delpuech (@LeCapet)
 **Démo** : https://alamine01.github.io/blockchain-3d/
@@ -55,4 +55,16 @@
 
 ## Note estimée par le groupe
 
-*À compléter après les tests et la répétition.*
+| Critère | Poids | Estimation | Pourquoi pas plus |
+|---|---|---|---|
+| Pertinence pédagogique | 25 % | 22 / 25 | Les 7 notions sont traitées, chacune par une interaction, et deux testeurs non initiés ont terminé l'enquête seuls en désignant le bon coupable. Le modèle reste simplifié (pas de signature cryptographique réelle, difficulté fixe à 3 zéros, 4 nœuds). |
+| Argumentation des choix | 25 % | 21 / 25 | Storyboard, tableau des choix transversaux, une fiche par notion, alternatives écartées et limites documentées. Le document n'a pas pu être transposé dans le modèle officiel de l'enseignant, faute de l'avoir récupéré à temps. |
+| GitHub Projects et gestion de projet | 20 % | 15 / 20 | Milestones calées sur le calendrier, issues granulaires liées aux commits, 8 fiches hebdomadaires. Mais S02 à S05 ont été rédigées a posteriori et signalées comme telles, et la répartition réelle du travail n'a pas été respectée en cours de projet. |
+| Interaction, UX et finition | 15 % | 13 / 15 | Tests réalisés, problèmes transformés en issues et corrigés le jour même ; accessibilité clavier, contrastes, mouvement réduit, mobile. La mesure des 30 FPS sur poste de TP reste à faire. |
+| Soutenance | 15 % | *à compléter après le 19/11* | |
+
+**Total estimé hors soutenance : 71 / 85, soit environ 16,7 / 20.**
+
+Le point le plus coûteux est la gestion de projet : le suivi hebdomadaire n'a pas
+été tenu au fil de l'eau et le travail n'a pas été réparti dans les faits. C'est
+assumé et expliqué dans les fiches plutôt que masqué.
