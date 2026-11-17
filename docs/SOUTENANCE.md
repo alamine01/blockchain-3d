@@ -13,10 +13,11 @@
 | 0:00–1:30 | 1-2 | A | Accroche : raconter l'affaire **avant** de nommer le projet. Puis le problème : 7 notions abstraites, public non initié, sans explication orale. |
 | 1:30–3:30 | 3-4 | B | Le parti pris (chaque notion = un indice) et pourquoi ce fil rouge. Les 9 chapitres et la correspondance avec les 7 notions. |
 | 3:30–10:30 | 5 | A (manipule) + B (commente) | **Démonstration** (voir script ci-dessous). |
-| 10:30–13:30 | 6-7 | B | Choix de modélisation défendus + limites assumées. |
-| 13:30–15:00 | 8 | A | Comment on empêche le novice de décrocher (mots cliquables, missions, récapitulatif). |
-| 15:00–17:00 | 9-10 | A | Gestion de projet GitHub (dont le retard assumé) ; tests et performance. |
-| 17:00–18:00 | 11-12 | B | Bilan, puis questions. |
+| 10:30–13:00 | 6-7 | B | Choix de modélisation défendus + limites assumées. |
+| 13:00–14:00 | 8 | A | Comment on empêche le novice de décrocher (mots cliquables, missions, récapitulatif). |
+| 14:00–15:30 | 9 | A | Gestion de projet GitHub : le retard assumé, et l'usage de l'IA assumé lui aussi. |
+| 15:30–17:30 | 10-11 | B | Tests et performance, puis **ce que les tests ont changé** (avant/après du panneau). |
+| 17:30–18:00 | 12-13 | A | Bilan, puis questions. |
 | 18:00–20:00 | — | Les deux | Questions du jury. |
 
 > Chaque membre doit pouvoir répondre sur **toutes** les parties : les rôles ci-dessus ne sont qu'une répartition de parole.
@@ -25,6 +26,7 @@
 
 Ouvrir le site **avant** de commencer, sur l'écran-titre. Désactiver les extensions de navigateur qui recolorent les pages (elles cassent le code couleur vert/rouge/ambre).
 
+0. **En arrivant au chapitre 1**, montrer du doigt les pastilles ambrées au-dessus des blocs. *« Ça, c'est né d'un test utilisateur : personne ne devinait que la scène était cliquable. »* Une phrase, pas plus — la diapo 11 y revient.
 1. **Chapitre 1 — le bloc.** Cliquer sur le bloc 7. *« Voilà ce que contient une page du registre : les données, son empreinte, l'empreinte de la page précédente, et un nonce. »*
 2. **Chapitre 2 — le chaînage.** Remplacer `500` par `501`. *« Un chiffre change, et 60 caractères sur 64 changent. Le bloc suivant ne reconnaît plus celui-ci. »* Cliquer sur « Re-miner » : le sceau revient, **mais le lien reste cassé**.
 3. **Chapitre 3 — la falsification.** Laisser le scanner balayer. *« La chaîne casse exactement au bloc 7, celui que Léa a modifié. »* Puis restaurer la version d'origine : tout redevient vert.
@@ -48,8 +50,14 @@ Pour la lisibilité. Mais la vraie règle n'est pas « la majorité des copies �
 **« Et si Léa avait plus de puissance que tout le réseau ? »**
 C'est l'attaque des 51 % : elle pourrait réécrire les blocs récents. Nous le mentionnons à la fin du chapitre 7, et c'est précisément pourquoi on attend plusieurs confirmations.
 
-**« Qu'est-ce que l'IA a écrit dans ce projet ? »**
-Nous l'avons utilisée pour le développement Three.js, la rédaction des fiches de recherche et la documentation. C'est déclaré dans le README, dans CHOIX-MODELISATION et dans chaque fiche hebdomadaire, avec ce que nous avons vérifié nous-mêmes. Nous pouvons expliquer n'importe quel fichier : `chain.js` contient le modèle, `story.js` une fonction par chapitre.
+**« Qu'est-ce que l'IA a écrit dans ce projet ? »** · *diapo 9, nous l'annonçons nous-mêmes*
+Trente des trente-sept commits sont rédigés par elle, et l'onglet *Contributors* du dépôt le montre sans ambiguïté — nous avons choisi de ne pas réécrire cet historique. Ce que nous avons fait nous-mêmes : le choix du fil rouge, les choix de modélisation, la relecture des textes, les tests utilisateurs, et la vérification de chaque notion contre les sources. C'est déclaré dans le README, dans CHOIX-MODELISATION et dans chaque fiche hebdomadaire.
+
+**« Savez-vous expliquer ce code ? »** · *la vraie question derrière la précédente*
+Oui, et c'est vérifiable sur place : `sha256.js` implémente la fonction de hachage, `chain.js` le modèle (bloc, minage, validation), `engine.js` la scène et les interactions, `story.js` une fonction par chapitre. Demandez-nous n'importe quel fichier.
+
+**« Vos testeurs portent le même nom que votre binôme. »**
+Ce sont deux proches de Hugo : extérieurs à la formation, donc non initiés, mais pas indépendants. Nous l'écrivons noir sur blanc dans `TESTS-UTILISATEURS.md`, avec les deux autres limites du protocole — la grille par chapitre n'a pas été remplie pendant la séance, et les FPS n'ont pas été relevés à cette occasion.
 
 **« Pourquoi quatre fiches hebdomadaires ont-elles été écrites après coup ? »**
 Parce que nous avons pris du retard fin octobre et que nous ne les avons pas envoyées à temps. Nous les avons reconstituées à partir de l'historique du dépôt et nous l'avons signalé en tête de chaque fiche, plutôt que de faire croire à un suivi régulier.
